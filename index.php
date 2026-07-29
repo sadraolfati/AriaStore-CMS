@@ -1,17 +1,7 @@
 <?php
-/**
- * AriaStore CMS (اریا استور) - Version 3 Beta 1
- * Author: Sadra Olfati / صدرا الفتی
- * License: MIT License
- * Website: https://xeondev.ir/ariastore
- */
-
 error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 session_start();
 
-// -------------------------------------------------------------------------
-// 1. اتصال به پایگاه داده و توابع نصب و راه‌اندازی (مشترک با admin.php)
-// -------------------------------------------------------------------------
 function get_db() {
     $db_file = 'database.sqlite';
     $db = new PDO('sqlite:' . $db_file);
@@ -390,7 +380,9 @@ function fa_price($num) {
     return number_format($num) . ' ریال';
 }
 function readingTime($text) {
-    return ceil(count(preg_split('/\s+/', trim(strip_tags($text)))) / 200) . ' دقیقه';
+    $wordCount = count(preg_split('/\s+/', trim(strip_tags($text))));
+    if ($wordCount === 0) return 'کمتر از 1 دقیقه';
+    return ceil($wordCount / 200) . ' دقیقه';
 }
 function get_like_count($db, $slug, $type) {
     $stmt = $db->prepare("SELECT COUNT(*) FROM likes WHERE item_slug=? AND item_type=?");
@@ -403,9 +395,6 @@ function has_user_liked($db, $slug, $type, $hash) {
     return $stmt->fetch() ? true : false;
 }
 
-// -------------------------------------------------------------------------
-// 2. اتصال و بارگذاری تنظیمات
-// -------------------------------------------------------------------------
 $db = get_db();
 check_and_handle_setup($db);
 $settings = get_all_settings($db);
@@ -419,9 +408,6 @@ if (!isset($_SESSION['user_hash'])) {
 }
 $user_hash = $_SESSION['user_hash'];
 
-// -------------------------------------------------------------------------
-// 3. API و درخواست‌های AJAX (جستجو، لایک، علاقه‌مندی‌ها و نظرات)
-// -------------------------------------------------------------------------
 if (isset($_GET['api'])) {
     header('Content-Type: application/json; charset=utf-8');
 
@@ -511,9 +497,6 @@ if (isset($_GET['api'])) {
     exit;
 }
 
-// -------------------------------------------------------------------------
-// 4. بارگذاری اطلاعات صفحه و نقشه نام دسته‌بندی‌ها
-// -------------------------------------------------------------------------
 $categories = $db->query("SELECT * FROM categories ORDER BY sort_order ASC, id ASC")->fetchAll();
 $cat_map = [];
 foreach ($categories as $c) {
@@ -555,6 +538,7 @@ if (isset($_GET['product'])) {
     foreach ($categories as $c) {
         if ($c['slug'] == $_GET['cat']) {
             $page_title = 'دسته ' . $c['name'] . ' | ' . $settings['site_title'];
+            break;
         }
     }
 } elseif ($route == 'shop') {
@@ -579,9 +563,8 @@ if (isset($_GET['product'])) {
 <html lang="fa" dir="rtl" data-theme="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title><?= htmlspecialchars($page_title) ?></title>
-    <!-- لود اولویت‌دار آیکون‌های گوگل فونت (Anti-FOUC) -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"></noscript>
     <style>
@@ -773,7 +756,6 @@ if (isset($_GET['product'])) {
             justify-content: center;
         }
 
-        /* نوار منو به همراه مگامنو بدون باگ و پرش */
         .nav-bar {
             background: var(--bg);
             border-bottom: 1px solid var(--border);
@@ -845,7 +827,6 @@ if (isset($_GET['product'])) {
         .mega-promo img { border-radius: 8px; margin-bottom: 10px; max-height: 120px; width: 100%; object-fit: cover; }
         .mega-promo h5 { font-size: 14px; font-weight: 800; margin-bottom: 6px; }
 
-        /* منوی کشویی موبایل و تبلت با پشتیبانی آکاردئونی برای مگامنو */
         .mobile-nav-btn { display: none; }
         .mobile-drawer {
             position: fixed;
@@ -992,6 +973,8 @@ if (isset($_GET['product'])) {
             align-items: center;
             justify-content: space-between;
             margin: 36px 0 20px 0;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         .section-header h2 { font-size: 22px; font-weight: 800; }
         .section-header a { font-size: 14px; font-weight: 700; color: var(--primary); }
@@ -1056,7 +1039,7 @@ if (isset($_GET['product'])) {
         .card-body { padding: 16px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; }
         .card-cat { font-size: 12px; color: var(--muted); margin-bottom: 6px; font-weight: 600; }
         .card-title { font-size: 14.5px; font-weight: 700; color: var(--text); line-height: 1.5; margin-bottom: 14px; height: 44px; overflow: hidden; }
-        .card-footer { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); padding-top: 14px; margin-top: auto; }
+        .card-footer { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); padding-top: 14px; margin-top: auto; flex-wrap: wrap; gap: 8px; }
         .old-price { font-size: 12.5px; color: var(--muted); text-decoration: line-through; }
         .new-price { font-size: 16px; font-weight: 800; color: var(--primary); }
 
@@ -1118,7 +1101,7 @@ if (isset($_GET['product'])) {
             background: var(--bg-secondary);
         }
         .gallery-main img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
-        .gallery-thumbs { display: flex; gap: 10px; margin-top: 12px; }
+        .gallery-thumbs { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
         .thumb-item {
             width: 70px;
             height: 70px;
@@ -1161,6 +1144,7 @@ if (isset($_GET['product'])) {
             justify-content: center;
             gap: 20px;
             margin: 20px 0;
+            flex-wrap: wrap;
         }
         .btn-buy-lg {
             display: inline-flex;
@@ -1194,7 +1178,7 @@ if (isset($_GET['product'])) {
             padding: 16px 0;
             border-bottom: 1px solid var(--border);
         }
-        .comment-header { display: flex; align-items: center; justify-content: space-between; font-weight: 700; margin-bottom: 6px; }
+        .comment-header { display: flex; align-items: center; justify-content: space-between; font-weight: 700; margin-bottom: 6px; flex-wrap: wrap; }
         .reply-box {
             background: var(--bg-secondary);
             padding: 12px 16px;
@@ -1204,7 +1188,6 @@ if (isset($_GET['product'])) {
             font-size: 14px;
         }
 
-        /* فوتر ۴ ستونه با لینک‌ها و شبکه‌های اجتماعی دلخواه (همراه با آیکون PNG) */
         .site-footer {
             background: var(--bg);
             border-top: 1px solid var(--border);
@@ -1277,15 +1260,33 @@ if (isset($_GET['product'])) {
             .nav-inner { display: none !important; }
             .mobile-nav-btn { display: inline-flex !important; }
             .products-grid { grid-template-columns: repeat(2, 1fr); }
+            .hero-slider { height: 280px; }
+            .header-inner { height: auto; padding: 12px 0; flex-wrap: wrap; }
+            .search-container { order: 3; max-width: 100%; width: 100%; margin-top: 10px; }
+            .section-header h2 { font-size: 20px; }
         }
+
+        @media (max-width: 768px) {
+            .hero-slider { height: 220px; }
+            .card-title { height: auto; }
+            .single-layout { padding: 20px; }
+            .specs-table th { width: 45%; }
+            .comment-form-grid { grid-template-columns: 1fr !important; }
+            .price-box { flex-direction: column; text-align: center; }
+            .btn-buy-lg { font-size: 15px; padding: 14px; }
+        }
+
         @media (max-width: 600px) {
             .footer-grid { grid-template-columns: 1fr; }
-            .header-inner { flex-wrap: wrap; height: auto; padding: 14px 0; }
-            .search-container { order: 3; max-width: 100%; width: 100%; margin-top: 10px; }
             .products-grid { grid-template-columns: 1fr; }
+            .hero-slider { height: 180px; border-radius: 12px; }
+            .categories-grid { grid-template-columns: repeat(2, 1fr); }
+            .promo-banner-card { height: 160px; }
+            .blog-slide-card { min-width: 280px; flex: 0 0 280px; }
+            .prod-info h1 { font-size: 20px; }
+            .variant-swatch { padding: 6px 12px; font-size: 12.5px; }
         }
     </style>
-    <!-- اسکریپت ضد پرش آیکون (Anti-FOUC) -->
     <script>
         if ('fonts' in document) {
             document.fonts.load('24px "Material Symbols Outlined"').then(function() {
@@ -1301,7 +1302,6 @@ if (isset($_GET['product'])) {
 <body>
     <?= $settings['body_scripts'] ?>
 
-    <!-- نوار بالایی هدر -->
     <?php if (!empty($settings['top_bar_text'])): ?>
     <div class="top-bar">
         <div class="container top-bar-inner">
@@ -1313,7 +1313,6 @@ if (isset($_GET['product'])) {
     </div>
     <?php endif; ?>
 
-    <!-- هدر سایت -->
     <header class="main-header">
         <div class="container header-inner">
             <a href="?" class="logo-box">
@@ -1328,7 +1327,6 @@ if (isset($_GET['product'])) {
                 </div>
             </a>
 
-            <!-- جستجوی زنده -->
             <div class="search-container">
                 <div class="search-box">
                     <select class="search-cat-select" onchange="if(this.value) window.location.href='?route=shop&cat='+encodeURIComponent(this.value); else window.location.href='?route=shop';">
@@ -1343,7 +1341,6 @@ if (isset($_GET['product'])) {
                 <div id="search-dropdown" class="search-dropdown"></div>
             </div>
 
-            <!-- دکمه‌های کنشی و منوی موبایل -->
             <div class="header-actions">
                 <button class="action-btn" onclick="toggleTheme()" title="تغییر حالت شب و روز">
                     <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
@@ -1359,7 +1356,6 @@ if (isset($_GET['product'])) {
         </div>
     </header>
 
-    <!-- نوار ناوبری به همراه مگامنو بدون هیچ باگ و پرش -->
     <nav class="nav-bar">
         <div class="container nav-inner">
             <?php foreach ($menus as $m): ?>
@@ -1405,7 +1401,6 @@ if (isset($_GET['product'])) {
         </div>
     </nav>
 
-    <!-- منوی کشویی موبایل و تبلت با پشتیبانی آکاردئونی برای مگامنو -->
     <div class="mobile-overlay" id="mobile-overlay" onclick="toggleMobileDrawer()"></div>
     <div class="mobile-drawer" id="mobile-drawer">
         <div style="padding: 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;">
@@ -1437,10 +1432,8 @@ if (isset($_GET['product'])) {
         </div>
     </div>
 
-    <!-- محتوای اصلی بر اساس مسیر -->
     <main class="container">
         <?php if ($route == 'home'): ?>
-            <!-- 1. اسلایدر (بدون هیچ‌گونه متن یا اورلی روی تصویر) -->
             <?php if (($settings['show_hero_slider'] ?? '1') === '1' && !empty($sliders)): ?>
                 <div class="hero-slider-wrap">
                     <section class="hero-slider">
@@ -1454,7 +1447,6 @@ if (isset($_GET['product'])) {
                             <?php endforeach; ?>
                         </div>
                     </section>
-                    <!-- نویگیشن زیر اسلایدر -->
                     <?php if (count($sliders) > 1): ?>
                     <div class="slider-bottom-nav">
                         <div class="slider-dots">
@@ -1471,7 +1463,6 @@ if (isset($_GET['product'])) {
                 </div>
             <?php endif; ?>
 
-            <!-- 2. دسته‌بندی‌های محبوب همراه با تصویر -->
             <?php if (($settings['show_categories'] ?? '1') === '1' && !empty($categories)): ?>
                 <div class="section-header">
                     <h2><?= htmlspecialchars($settings['categories_title'] ?? 'دسته‌بندی‌های محبوب') ?></h2>
@@ -1491,7 +1482,6 @@ if (isset($_GET['product'])) {
                 </div>
             <?php endif; ?>
 
-            <!-- 3. بنرهای تبلیغاتی وسط صفحه اصلی -->
             <?php
             $middle_banners = $db->query("SELECT * FROM banners WHERE position = 'home_middle' ORDER BY sort_order ASC, id ASC")->fetchAll();
             if (($settings['show_middle_banners'] ?? '1') === '1' && !empty($middle_banners)):
@@ -1505,7 +1495,6 @@ if (isset($_GET['product'])) {
                 </div>
             <?php endif; ?>
 
-            <!-- 4. پیشنهاد شگفت‌انگیز -->
             <?php
             $special = $db->query("SELECT * FROM products WHERE is_special = 1 ORDER BY id DESC")->fetchAll();
             if (($settings['show_special_offers'] ?? '1') === '1' && !empty($special)):
@@ -1545,7 +1534,6 @@ if (isset($_GET['product'])) {
                 </div>
             <?php endif; ?>
 
-            <!-- 5. جدیدترین محصولات -->
             <?php
             $latest = $db->query("SELECT * FROM products ORDER BY id DESC LIMIT 8")->fetchAll();
             if (($settings['show_latest_products'] ?? '1') === '1'):
@@ -1590,7 +1578,6 @@ if (isset($_GET['product'])) {
                 <?php endif; ?>
             <?php endif; ?>
 
-            <!-- 6. اسلایدر مقالات در صفحه اصلی (بدون نمایش بازدید اشتباه) -->
             <?php
             $home_posts = $db->query("SELECT * FROM posts ORDER BY id DESC LIMIT 6")->fetchAll();
             if (($settings['show_blog_slider'] ?? '1') === '1' && !empty($home_posts)):
@@ -1619,7 +1606,6 @@ if (isset($_GET['product'])) {
             <?php endif; ?>
 
         <?php elseif ($route == 'shop'): ?>
-            <!-- صفحه محصولات -->
             <div style="margin: 24px 0;">
                 <h1 style="font-size:24px; font-weight:800; margin-bottom:20px;"><?= htmlspecialchars($page_title) ?></h1>
                 <?php
@@ -1679,7 +1665,6 @@ if (isset($_GET['product'])) {
             $like_count = get_like_count($db, $p['slug'], 'product');
             $is_liked = has_user_liked($db, $p['slug'], 'product', $user_hash);
         ?>
-            <!-- صفحه جزئیات محصول (بدون نمایش بازدید اشتباه) -->
             <div class="single-layout">
                 <div>
                     <div class="gallery-main" id="gallery-main">
@@ -1718,7 +1703,6 @@ if (isset($_GET['product'])) {
                         <?php if ($disc > 0): ?><span class="discount-badge" style="position:static;"><?= $disc ?>% تخفیف</span><?php endif; ?>
                     </div>
 
-                    <!-- نمایش متغیرها -->
                     <?php if (!empty($variables)): ?>
                         <?php foreach ($variables as $g_idx => $group): ?>
                             <div class="variant-group">
@@ -1737,7 +1721,6 @@ if (isset($_GET['product'])) {
                         <?php endforeach; ?>
                     <?php endif; ?>
 
-                    <!-- دکمه خرید اصلی -->
                     <?php if (!empty($p['external_link'])): ?>
                         <a href="<?= htmlspecialchars($p['external_link']) ?>" target="_blank" rel="nofollow" class="btn-buy-lg">
                             <span class="material-symbols-outlined">open_in_new</span>
@@ -1756,7 +1739,6 @@ if (isset($_GET['product'])) {
                 </div>
             </div>
 
-            <!-- توضیحات و مشخصات فنی (پشتیبانی از HTML و IFrame) -->
             <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:16px; padding:28px; margin:24px 0;">
                 <h3 style="font-size:18px; font-weight:800; margin-bottom:16px; color:var(--primary);">معرفی و بررسی محصول</h3>
                 <div style="line-height:2; color:var(--text); font-size:15px; margin-bottom:28px;">
@@ -1778,12 +1760,11 @@ if (isset($_GET['product'])) {
                 <?php endif; ?>
             </div>
 
-            <!-- دیدگاه‌های کاربران -->
             <div class="comments-section">
                 <h3 style="font-size:18px; font-weight:800; margin-bottom:20px;">دیدگاه کاربران درباره <?= htmlspecialchars($p['title']) ?></h3>
 
                 <form onsubmit="submitCommentForm(event, '<?= $p['slug'] ?>', 'product')" style="margin-bottom:28px; background:var(--bg-secondary); padding:20px; border-radius:14px; border:1px solid var(--border);">
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:16px;">
+                    <div class="comment-form-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:16px;">
                         <input type="text" id="comm-name" placeholder="نام شما" required style="padding:11px; border-radius:10px; border:1px solid var(--border); background:var(--bg); color:var(--text);">
                         <select id="comm-rating" style="padding:11px; border-radius:10px; border:1px solid var(--border); background:var(--bg); color:var(--text);">
                             <option value="5">⭐⭐⭐⭐⭐ (۵ از ۵ - عالی)</option>
@@ -1822,7 +1803,6 @@ if (isset($_GET['product'])) {
             </div>
 
         <?php elseif ($route == 'wishlist'): ?>
-            <!-- صفحه علاقه‌مندی‌ها -->
             <div style="margin: 24px 0;">
                 <h1 style="font-size:24px; font-weight:800; margin-bottom:20px;">لیست علاقه‌مندی‌های شما</h1>
                 <div id="wishlist-container">
@@ -1831,7 +1811,6 @@ if (isset($_GET['product'])) {
             </div>
 
         <?php elseif ($route == 'blog'): ?>
-            <!-- مقالات (بدون نمایش بازدید اشتباه) -->
             <div style="margin:24px 0;">
                 <h1 style="font-size:24px; font-weight:800; margin-bottom:20px;"><?= htmlspecialchars($page_title) ?></h1>
                 <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:24px;">
@@ -1864,10 +1843,9 @@ if (isset($_GET['product'])) {
             $like_count = get_like_count($db, $po['slug'], 'post');
             $is_liked = has_user_liked($db, $po['slug'], 'post', $user_hash);
         ?>
-            <!-- صفحه مقاله (بدون نمایش بازدید اشتباه) -->
             <article style="background:var(--card-bg); border:1px solid var(--border); border-radius:16px; padding:32px; margin:24px 0;">
                 <h1 style="font-size:26px; font-weight:800; margin-bottom:12px;"><?= htmlspecialchars($po['title']) ?></h1>
-                <div style="color:var(--muted); font-size:14px; margin-bottom:20px; display:flex; align-items:center; gap:16px;">
+                <div style="color:var(--muted); font-size:14px; margin-bottom:20px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
                     <span>نویسنده: <?= htmlspecialchars($po['author']) ?></span> | <span><?= readingTime($po['content']) ?> مطالعه</span>
                     <span>
                         <button onclick="toggleLike('<?= $po['slug'] ?>', 'post')" style="background:none;border:none;cursor:pointer;color:<?= $is_liked ? '#ef4444' : 'var(--muted)' ?>;font-size:14px;display:inline-flex;align-items:center;gap:4px;">
@@ -1884,11 +1862,10 @@ if (isset($_GET['product'])) {
                 </div>
             </article>
 
-            <!-- نظرات مقاله -->
             <div class="comments-section">
                 <h3 style="font-size:18px; font-weight:800; margin-bottom:20px;">دیدگاه کاربران درباره این مقاله</h3>
                 <form onsubmit="submitCommentForm(event, '<?= $po['slug'] ?>', 'post')" style="margin-bottom:28px; background:var(--bg-secondary); padding:20px; border-radius:14px; border:1px solid var(--border);">
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:16px;">
+                    <div class="comment-form-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:16px;">
                         <input type="text" id="comm-name" placeholder="نام شما" required style="padding:11px; border-radius:10px; border:1px solid var(--border); background:var(--bg); color:var(--text);">
                         <select id="comm-rating" style="padding:11px; border-radius:10px; border:1px solid var(--border); background:var(--bg); color:var(--text);">
                             <option value="5">⭐⭐⭐⭐⭐ (۵ از ۵)</option>
@@ -1936,7 +1913,6 @@ if (isset($_GET['product'])) {
         <?php endif; ?>
     </main>
 
-    <!-- فوتر ۴ ستونه با قابلیت اضافه کردن لینک‌های دلخواه و شبکه‌های اجتماعی دلخواه (همراه با آیکون PNG) -->
     <footer class="site-footer">
         <div class="container footer-grid">
             <div class="footer-col">
@@ -1944,7 +1920,6 @@ if (isset($_GET['product'])) {
                 <p><?= htmlspecialchars($settings['footer_about']) ?></p>
                 <div class="social-links-wrap">
                     <?php
-                    // نمایش شبکه‌های اجتماعی دلخواه ایجاد شده توسط مدیر (همراه با آیکون PNG)
                     $custom_socials = json_decode($settings['custom_social_networks'] ?? '[]', true);
                     if (!empty($custom_socials) && is_array($custom_socials)) {
                         foreach ($custom_socials as $soc):
@@ -2005,7 +1980,6 @@ if (isset($_GET['product'])) {
     <div id="toast"></div>
 
     <script>
-        // اسلایدر
         let slideIndex = 0;
         function goToSlide(idx) {
             const track = document.getElementById('slides-track');
@@ -2023,7 +1997,6 @@ if (isset($_GET['product'])) {
             if (track && track.children.length > 1) nextSlide();
         }, 6000);
 
-        // گالری و متغیرهای محصول
         function switchThumb(el, src) {
             document.querySelectorAll('.thumb-item').forEach(t => t.classList.remove('active'));
             if (el) el.classList.add('active');
@@ -2040,7 +2013,6 @@ if (isset($_GET['product'])) {
             }
         }
 
-        // تم شب و روز
         function toggleTheme() {
             const html = document.documentElement;
             const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
@@ -2052,7 +2024,6 @@ if (isset($_GET['product'])) {
         const savedTheme = localStorage.getItem('aria_theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
 
-        // جستجوی زنده
         let searchTimer = null;
         function liveSearch(q) {
             clearTimeout(searchTimer);
