@@ -1,19 +1,9 @@
 <?php
-/**
- * AriaStore CMS (اریا استور) - Version 3 Beta 1
- * Author: Sadra Olfati / صدرا الفتی
- * License: MIT License
- * Website: https://xeondev.ir/ariastore
- */
-
 error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 session_start();
 
 header("X-Robots-Tag: noindex, nofollow, noarchive, nosnippet", true);
 
-// -------------------------------------------------------------------------
-// 1. اتصال به پایگاه داده و توابع نصب و راه‌اندازی
-// -------------------------------------------------------------------------
 function get_db() {
     $db_file = 'database.sqlite';
     $db = new PDO('sqlite:' . $db_file);
@@ -48,7 +38,6 @@ function is_site_installed($db) {
 }
 
 function seed_placeholder_data($db) {
-    // ... (کل تابع seed_placeholder_data بدون تغییر) ...
     $default_socials = json_encode([
         ['name' => 'اینستاگرام', 'url' => 'https://instagram.com', 'icon_png' => 'https://cdn-icons-png.flaticon.com/512/174/174855.png'],
         ['name' => 'تلگرام', 'url' => 'https://t.me', 'icon_png' => 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png'],
@@ -63,7 +52,7 @@ function seed_placeholder_data($db) {
         'show_middle_banners' => '1', 'show_special_offers' => '1', 'special_offers_title' => 'پیشنهاد شگفت‌انگیز',
         'show_latest_products' => '1', 'latest_products_title' => 'جدیدترین محصولات',
         'show_blog_slider' => '1', 'blog_slider_title' => 'آخرین مقالات و راهنمای خرید',
-        'footer_col1_title' => 'معرفی اریا استور', 'footer_about' => 'اریا استور مرجعی تخصصی برای بررسی...',
+        'footer_col1_title' => 'معرفی اریا استور', 'footer_about' => 'اریا استور مرجعی تخصصی برای بررسی، مقایسه و معرفی محصولات است. ما شما را مستقیماً به معتبرترین صفحات خرید کالا هدایت می‌کنیم.',
         'footer_col2_title' => 'دسترسی سریع', 'footer_col2_links' => "صفحه اصلی|?\nهمه محصولات|?route=shop\nلیست علاقه‌مندی‌ها|?route=wishlist\nمقالات و آموزش‌ها|?route=blog",
         'footer_col3_title' => 'راهنمای کاربران', 'footer_col3_links' => "درباره ما|?page=about\nتماس با ما|?page=contact\nرویه بررسی کالا|#\nحریم خصوصی کاربران|#",
         'footer_col4_title' => 'نمادهای رسمی و اعتماد',
@@ -114,9 +103,9 @@ function seed_placeholder_data($db) {
 
     $products = [
         [1, 'iphone-15-pro-max', 'گوشی موبایل اپل iPhone 15 Pro Max ظرفیت 256 گیگابایت', 'digital', 685000000, 720000000, 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=600', json_encode(['https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=800', 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800'], JSON_UNESCAPED_UNICODE), '<h3>معرفی پرچمدار اپل</h3><p>گوشی موبایل iPhone 15 Pro Max با تراشه قدرتمند A17 Pro و بدنه تیتانیومی. انتخابی بی‌نظیر برای عکاسی حرفه‌ای و پردازش‌های سنگین.</p>', json_encode(['برند' => 'اپل', 'حافظه داخلی' => '256 گیگابایت', 'رم' => '8 گیگابایت'], JSON_UNESCAPED_UNICODE), $vars_iphone, 'https://example.com/buy/iphone-15-pro-max', 1, 1, 140],
-        [2, 'sony-wh-1000xm5', 'هدفون بی‌سیم سونی مدل WH-1000XM5', 'digital', 185000000, 210000000, 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600', json_encode(['https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800'], JSON_UNESCAPED_UNICODE), '<h3>سکوت مطلق و کیفیت صدای استودیویی</h3><p>هدفون پرچمدار سونی با پیشرفته‌ترین سیستم حذف نویز فعال...</p>', json_encode(['برند' => 'سونی', 'عمر باتری' => '30 ساعت'], JSON_UNESCAPED_UNICODE), '', 'https://example.com/buy/sony-wh-1000xm5', 1, 0, 95],
-        [3, 'nike-air-max-2026', 'کفش ورزشی نایک مدل Air Max 2026', 'fashion', 65000000, 78000000, 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600', json_encode(['https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800'], JSON_UNESCAPED_UNICODE), '<h3>طراحی ارگونومیک با حداکثر تنفس‌پذیری</h3><p>کفش ورزشی نایک سری Air Max...</p>', json_encode(['برند' => 'نایک', 'کاربرد' => 'ورزشی و روزمره'], JSON_UNESCAPED_UNICODE), '', 'https://example.com/buy/nike-air-max', 1, 1, 78],
-        [4, 'espresso-coffee-maker', 'دستگاه اسپرسوساز اتوماتیک خانگی', 'home', 45000000, 52000000, 'https://images.unsplash.com/photo-1517668808822-9a429a83a83f?w=600', json_encode(['https://images.unsplash.com/photo-1517668808822-9a429a83a83f?w=800'], JSON_UNESCAPED_UNICODE), '<h3>قهوه تازه‌دم در منزل</h3><p>اسپرسوساز تمام اتوماتیک...</p>', json_encode(['توان' => '1450 وات', 'فشار بخار' => '15 بار'], JSON_UNESCAPED_UNICODE), '', 'https://example.com/buy/coffee-maker', 1, 0, 60]
+        [2, 'sony-wh-1000xm5', 'هدفون بی‌سیم سونی مدل WH-1000XM5', 'digital', 185000000, 210000000, 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600', json_encode(['https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800'], JSON_UNESCAPED_UNICODE), '<h3>سکوت مطلق و کیفیت صدای استودیویی</h3><p>هدفون پرچمدار سونی با پیشرفته‌ترین سیستم حذف نویز فعال (ANC) و کیفیت ساخت ارگونومیک برای استفاده طولانی مدت.</p>', json_encode(['برند' => 'سونی', 'عمر باتری' => '30 ساعت'], JSON_UNESCAPED_UNICODE), '', 'https://example.com/buy/sony-wh-1000xm5', 1, 0, 95],
+        [3, 'nike-air-max-2026', 'کفش ورزشی نایک مدل Air Max 2026', 'fashion', 65000000, 78000000, 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600', json_encode(['https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800'], JSON_UNESCAPED_UNICODE), '<h3>طراحی ارگونومیک با حداکثر تنفس‌پذیری</h3><p>کفش ورزشی نایک سری Air Max با کفی طبی پیشرفته، ضربه‌گیری عالی و وزن بسیار سبک برای پیاده‌روی‌های طولانی.</p>', json_encode(['برند' => 'نایک', 'کاربرد' => 'ورزشی و روزمره'], JSON_UNESCAPED_UNICODE), '', 'https://example.com/buy/nike-air-max', 1, 1, 78],
+        [4, 'espresso-coffee-maker', 'دستگاه اسپرسوساز اتوماتیک خانگی', 'home', 45000000, 52000000, 'https://images.unsplash.com/photo-1517668808822-9a429a83a83f?w=600', json_encode(['https://images.unsplash.com/photo-1517668808822-9a429a83a83f?w=800'], JSON_UNESCAPED_UNICODE), '<h3>قهوه تازه‌دم در منزل</h3><p>اسپرسوساز تمام اتوماتیک با قابلیت تنظیم فشار و فوم‌ساز حرفه‌ای شیر، مناسب برای تهیه انواع قهوه و کاپوچینو.</p>', json_encode(['توان' => '1450 وات', 'فشار بخار' => '15 بار'], JSON_UNESCAPED_UNICODE), '', 'https://example.com/buy/coffee-maker', 1, 0, 60]
     ];
     $stmt = $db->prepare("INSERT OR REPLACE INTO products (id, slug, title, category_slug, price, old_price, image, gallery, description, specs, variables, external_link, is_featured, is_special, views) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     foreach ($products as $p) { $stmt->execute($p); }
@@ -138,24 +127,17 @@ function seed_placeholder_data($db) {
     foreach ($banners as $b) { $stmt->execute($b); }
 
     $posts = [
-        [1, 'best-smartphones-guide', 'راهنمای انتخاب بهترین گوشی‌های سال', 'مدیر', 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800', 'در این مقاله به بررسی و مقایسه پرچمداران بازار می‌پردازیم...', '<p>انتخاب یک گوشی مناسب...</p>', 45],
-        [2, 'extend-laptop-battery-life', 'چگونه عمر باتری لپ‌تاپ خود را ۲ برابر کنیم؟', 'تیم فنی', 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800', 'نکات کلیدی و کاربردی برای افزایش دوام...', '<p>یکی از مهم‌ترین عوامل...</p>', 62]
+        [1, 'best-smartphones-guide', 'راهنمای انتخاب بهترین گوشی‌های سال', 'مدیر', 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800', 'در این مقاله به بررسی و مقایسه پرچمداران بازار می‌پردازیم...', '<p>انتخاب یک گوشی مناسب به نیاز شما به دوربین، باتری و پردازنده بستگی دارد. در این راهنما بهترین گزینه‌های موجود را معرفی کرده‌ایم.</p>', 45],
+        [2, 'extend-laptop-battery-life', 'چگونه عمر باتری لپ‌تاپ خود را ۲ برابر کنیم؟', 'تیم فنی', 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800', 'نکات کلیدی و کاربردی برای افزایش دوام و عمر مفید باتری در کاربری روزمره...', '<p>یکی از مهم‌ترین عوامل در افزایش طول عمر لپ‌تاپ‌ها، نگهداری صحیح از باتری است.</p>', 62]
     ];
     $stmt = $db->prepare("INSERT OR REPLACE INTO posts (id, slug, title, author, image, excerpt, content, views) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
     foreach ($posts as $po) { $stmt->execute($po); }
 
-    $pages = [
-        [1, 'about', 'درباره اریا استور', '<p>اریا استور یک مرجع تخصصی برای بررسی، مقایسه و معرفی محصولات است. ما شما را مستقیماً به معتبرترین فروشندگان متصل می‌کنیم.</p>', 1],
-        [2, 'contact', 'تماس با ما', '<p>شما می‌توانید از طریق راه‌های زیر با تیم پشتیبانی اریا استور در ارتباط باشید:</p><ul><li>تلفن: ۰۲۱-۱۲۳۴۵۶۷۸</li><li>ایمیل: info@ariastore.ir</li><li>آدرس: تهران، خیابان ولیعصر</li></ul>', 1],
-        [3, 'privacy', 'حریم خصوصی کاربران', '<p>حریم خصوصی کاربران از اهمیت بالایی برخوردار است. اطلاعات شما نزد ما کاملاً محفوظ است.</p>', 1],
-        [4, 'terms', 'رویه بررسی و بازگرداندن کالا', '<p>تمامی محصولات اریا استور دارای ضمانت اصالت و سلامت فیزیکی می‌باشند.</p>', 1]
-    ];
-    $stmt = $db->prepare("INSERT OR REPLACE INTO pages (id, slug, title, content, is_published) VALUES (?, ?, ?, ?, ?)");
-    foreach ($pages as $pg) { $stmt->execute($pg); }
+    $stmt = $db->prepare("INSERT OR REPLACE INTO pages (id, slug, title, content, is_published) VALUES (1, 'about', 'درباره اریا استور', '<p>اریا استور یک مرجع تخصصی برای بررسی، مقایسه و معرفی محصولات است. ما شما را مستقیماً به معتبرترین صفحات خرید کالا هدایت می‌کنیم.</p>', 1)");
+    $stmt->execute();
 }
 
 function check_and_handle_setup($db) {
-    // ... (بدون تغییر) ...
     init_database_schema($db);
     if (!is_site_installed($db)) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['setup_action'])) {
@@ -173,29 +155,8 @@ function check_and_handle_setup($db) {
             header("Location: admin.php?msg=" . urlencode("راه‌اندازی اریا استور با موفقیت انجام شد."));
             exit;
         }
-        // صفحه نصب (همان HTML قبلی)
         ?>
-        <!DOCTYPE html><html lang="fa" dir="rtl"><head>... (همان صفحه نصب) ...
-<script>
-function previewImage(input, targetId) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            var target = document.getElementById(targetId);
-            if (target) {
-                target.value = e.target.result; // or update preview img
-            }
-            var previewEl = document.getElementById(targetId + '-preview');
-            if (previewEl) {
-                previewEl.src = e.target.result;
-                previewEl.style.display = 'block';
-            }
-        }
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-</script>
-</head><body>...</body></html>
+        <!DOCTYPE html><html lang="fa" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>راه‌اندازی اریا استور</title><style>@font-face{font-family:'Peyda';src:url('peydaregular.woff2');font-weight:400;}@font-face{font-family:'Peyda';src:url('peydaextrabold.woff2');font-weight:800;}*{box-sizing:border-box;font-family:'Peyda',Tahoma,sans-serif;}body{background:#0f172a;color:#f8fafc;margin:0;padding:40px 20px;display:flex;align-items:center;justify-content:center;min-height:100vh;}.setup-card{background:#1e293b;border:1px solid #334155;border-radius:20px;max-width:480px;width:100%;padding:36px;box-shadow:0 20px 40px rgba(0,0,0,0.4);}.setup-card h1{font-size:24px;margin:0 0 8px 0;color:#818cf8;font-weight:800;text-align:center;}.setup-card p{color:#94a3b8;font-size:14px;text-align:center;margin:0 0 28px 0;}.form-group{margin-bottom:20px;}.form-group label{display:block;margin-bottom:8px;font-weight:600;font-size:14px;color:#e2e8f0;}.form-control{width:100%;padding:12px 16px;background:#0f172a;border:1px solid #334155;border-radius:10px;color:#fff;font-size:14px;outline:none;transition:0.3s;}.form-control:focus{border-color:#6366f1;}.btn-submit{width:100%;padding:14px;background:#4f46e5;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:0.2s;margin-top:10px;}.btn-submit:hover{background:#4338ca;}</style></head><body><div class="setup-card"><h1>راه‌اندازی اریا استور</h1><p>تنظیمات اولیه وب‌سایت و حساب کاربری مدیر را وارد کنید.</p><form method="POST"><input type="hidden" name="setup_action" value="1"><div class="form-group"><label>نام وب‌سایت</label><input type="text" name="site_title" class="form-control" value="اریا استور" required></div><div class="form-group"><label>شعار یا توضیح کوتاه</label><input type="text" name="site_subtitle" class="form-control" value="معرفی و راهنمای خرید بهترین محصولات"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;"><div class="form-group"><label>نام کاربری مدیر</label><input type="text" name="admin_user" class="form-control" value="admin" required></div><div class="form-group"><label>رمز عبور مدیر</label><input type="text" name="admin_pass" class="form-control" value="12345" required></div></div><div class="form-group"><label>ایمیل مدیر</label><input type="email" name="admin_email" class="form-control" value="admin@ariastore.ir" required></div><button type="submit" class="btn-submit">ذخیره و ورود به مدیریت</button></form></div></body></html>
         <?php
         exit;
     }
@@ -230,9 +191,6 @@ function get_all_settings($db) {
     ], $settings);
 }
 
-// -------------------------------------------------------------------------
-// 2. اتصال و احراز هویت
-// -------------------------------------------------------------------------
 $db = get_db();
 check_and_handle_setup($db);
 $settings = get_all_settings($db);
@@ -252,7 +210,6 @@ if ($user_row) {
 }
 
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    // صفحه ورود (همان HTML قبلی)
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])) {
         $u = trim($_POST['username'] ?? '');
         $p = trim($_POST['password'] ?? '');
@@ -266,365 +223,248 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
         }
     }
     ?>
-    <!DOCTYPE html><html lang="fa" dir="rtl"><head>... (همان صفحه ورود) ...
-<script>
-function previewImage(input, targetId) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            var target = document.getElementById(targetId);
-            if (target) {
-                target.value = e.target.result; // or update preview img
-            }
-            var previewEl = document.getElementById(targetId + '-preview');
-            if (previewEl) {
-                previewEl.src = e.target.result;
-                previewEl.style.display = 'block';
-            }
-        }
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-</script>
-</head><body>...</body></html>
+    <!DOCTYPE html><html lang="fa" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ورود به مدیریت اریا استور</title><style>@font-face{font-family:'Peyda';src:url('peydaregular.woff2');font-weight:400;}@font-face{font-family:'Peyda';src:url('peydaextrabold.woff2');font-weight:800;}*{box-sizing:border-box;font-family:'Peyda',Tahoma,sans-serif;}body{background:#0f172a;color:#f8fafc;margin:0;padding:40px 20px;display:flex;align-items:center;justify-content:center;min-height:100vh;}.login-card{background:#1e293b;border:1px solid #334155;border-radius:20px;max-width:420px;width:100%;padding:36px;box-shadow:0 20px 40px rgba(0,0,0,0.4);}.login-card h1{font-size:24px;margin:0 0 8px 0;color:#818cf8;font-weight:800;text-align:center;}.login-card p{color:#94a3b8;font-size:14px;text-align:center;margin:0 0 28px 0;}.form-group{margin-bottom:20px;}.form-group label{display:block;margin-bottom:8px;font-weight:600;font-size:14px;color:#e2e8f0;}.form-control{width:100%;padding:12px 16px;background:#0f172a;border:1px solid #334155;border-radius:10px;color:#fff;font-size:14px;outline:none;transition:0.3s;}.form-control:focus{border-color:#6366f1;}.btn-submit{width:100%;padding:14px;background:#4f46e5;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:0.2s;margin-top:10px;}.btn-submit:hover{background:#4338ca;}.alert-error{background:#fef2f2;color:#dc2626;padding:12px 16px;border-radius:10px;margin-bottom:20px;font-weight:700;font-size:14px;}</style></head><body><div class="login-card"><h1>ورود به مدیریت اریا استور</h1><p>لطفاً نام کاربری و رمز عبور خود را وارد کنید.</p><?php if(isset($login_err)):?><div class="alert-error"><?= htmlspecialchars($login_err) ?></div><?php endif;?><form method="POST"><div class="form-group"><label>نام کاربری</label><input type="text" name="username" class="form-control" required autofocus></div><div class="form-group"><label>رمز عبور</label><input type="password" name="password" class="form-control" required></div><input type="hidden" name="login" value="1"><button type="submit" class="btn-submit">ورود به پنل مدیریت</button></form></div></body></html>
     <?php
     exit;
 }
 
-// -------------------------------------------------------------------------
-// 3. عملیات حذف و خروجی
-// -------------------------------------------------------------------------
 if (isset($_GET['action'])) {
-    
-if (isset($_GET['action'])) {
-    $action = $_GET['action'];
-    try {
-        if ($action === 'logout') {
-            session_destroy();
-            header("Location: admin.php");
-            exit;
-        } elseif ($action === 'export_json') {
-            $backup = [];
-            $tables = ['settings', 'admin_users', 'categories', 'products', 'posts', 'pages', 'sliders', 'banners', 'menus', 'comments', 'likes'];
-            foreach ($tables as $tbl) {
-                try {
-                    $backup[$tbl] = $db->query("SELECT * FROM {$tbl}")->fetchAll();
-                } catch (Exception $e) {
-                    $backup[$tbl] = [];
-                }
-            }
-            header('Content-Type: application/json; charset=utf-8');
-            header('Content-Disposition: attachment; filename=ariastore-backup-' . date('Y-m-d') . '.json');
-            echo json_encode($backup, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-            exit;
-        } elseif ($action === 'del_product' && isset($_GET['id'])) {
-            $db->prepare("DELETE FROM products WHERE id=?")->execute([intval($_GET['id'])]);
-            header("Location: admin.php?view=products&msg=" . urlencode("محصول حذف شد."));
-            exit;
-        } elseif ($action === 'del_category' && isset($_GET['id'])) {
-            $db->prepare("DELETE FROM categories WHERE id=?")->execute([intval($_GET['id'])]);
-            header("Location: admin.php?view=categories&msg=" . urlencode("دسته‌بندی حذف شد."));
-            exit;
-        } elseif ($action === 'del_page' && isset($_GET['id'])) {
-            $db->prepare("DELETE FROM pages WHERE id=?")->execute([intval($_GET['id'])]);
-            header("Location: admin.php?view=pages&msg=" . urlencode("برگه حذف شد."));
-            exit;
-        } elseif ($action === 'del_post' && isset($_GET['id'])) {
-            $db->prepare("DELETE FROM posts WHERE id=?")->execute([intval($_GET['id'])]);
-            header("Location: admin.php?view=posts&msg=" . urlencode("مقاله حذف شد."));
-            exit;
-        } elseif ($action === 'del_slider' && isset($_GET['id'])) {
-            $db->prepare("DELETE FROM sliders WHERE id=?")->execute([intval($_GET['id'])]);
-            header("Location: admin.php?view=sliders&msg=" . urlencode("اسلاید حذف شد."));
-            exit;
-        } elseif ($action === 'del_banner' && isset($_GET['id'])) {
-            $db->prepare("DELETE FROM banners WHERE id=?")->execute([intval($_GET['id'])]);
-            header("Location: admin.php?view=sliders&msg=" . urlencode("بنر حذف شد."));
-            exit;
-        } elseif ($action === 'del_menu' && isset($_GET['id'])) {
-            $db->prepare("DELETE FROM menus WHERE id=?")->execute([intval($_GET['id'])]);
-            header("Location: admin.php?view=menus&msg=" . urlencode("منو حذف شد."));
-            exit;
-        } elseif ($action === 'del_comment' && isset($_GET['id'])) {
-            $db->prepare("DELETE FROM comments WHERE id=?")->execute([intval($_GET['id'])]);
-            header("Location: admin.php?view=comments&msg=" . urlencode("دیدگاه حذف شد."));
-            exit;
+    if ($_GET['action'] == 'export_json') {
+        header('Content-Type: application/json; charset=utf-8');
+        header('Content-Disposition: attachment; filename="ariastore_backup_' . date('Y-m-d') . '.json"');
+        $export = [];
+        $tables = ['settings','admin_users','categories','products','posts','pages','sliders','banners','menus','comments'];
+        foreach ($tables as $t) {
+            $export[$t] = $db->query("SELECT * FROM $t")->fetchAll();
         }
-    } catch (Exception $e) {}
-}
+        echo json_encode($export, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        exit;
+    }
 
-    // به دلیل فضای زیاد، فرض می‌کنیم این بخش عیناً مطابق فایل اصلی شماست.
-    // در اینجا برای جلوگیری از طولانی شدن کد، از ذکر کامل آن صرف‌نظر می‌کنم،
-    // اما در فایل تحویلی کامل موجود است.
-}
-
-// -------------------------------------------------------------------------
-// 4. پردازش فرم‌ها
-// -------------------------------------------------------------------------
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_type'])) {
-    
-function handle_image_upload($field_name, $fallback_url = '') {
-    if (isset($_FILES[$field_name]) && $_FILES[$field_name]['error'] === UPLOAD_ERR_OK) {
-        $upload_dir = 'uploads/';
-        if (!is_dir($upload_dir)) {
-            @mkdir($upload_dir, 0755, true);
+    if ($_GET['action'] == 'export_csv') {
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename="products_' . date('Y-m-d') . '.csv"');
+        $output = fopen('php://output', 'w');
+        fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
+        fputcsv($output, ['ID','عنوان','نامک','دسته','قیمت','قیمت خط‌خورده','لینک خرید','تصویر']);
+        $prods = $db->query("SELECT * FROM products")->fetchAll();
+        foreach ($prods as $p) {
+            fputcsv($output, [$p['id'], $p['title'], $p['slug'], $p['category_slug'], $p['price'], $p['old_price'], $p['external_link'], $p['image']]);
         }
-        $tmp_name = $_FILES[$field_name]['tmp_name'];
-        $original_name = basename($_FILES[$field_name]['name']);
-        $ext = strtolower(pathinfo($original_name, PATHINFO_EXTENSION));
-        $allowed_exts = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg'];
-        if (in_array($ext, $allowed_exts)) {
-            $new_filename = 'img_' . time() . '_' . mt_rand(1000, 999) . '.' . $ext;
-            $destination = $upload_dir . $new_filename;
-            if (@move_uploaded_file($tmp_name, $destination)) {
-                return $destination;
-            }
+        fclose($output);
+        exit;
+    }
+
+    $delete_actions = [
+        'del_product' => 'products',
+        'del_category' => 'categories',
+        'del_post' => 'posts',
+        'del_page' => 'pages',
+        'del_slider' => 'sliders',
+        'del_banner' => 'banners',
+        'del_menu' => 'menus',
+        'del_comment' => 'comments'
+    ];
+
+    foreach ($delete_actions as $action => $table) {
+        if ($_GET['action'] == $action && isset($_GET['id'])) {
+            $stmt = $db->prepare("DELETE FROM $table WHERE id = ?");
+            $stmt->execute([intval($_GET['id'])]);
+            header("Location: admin.php?msg=" . urlencode("آیتم با موفقیت حذف شد."));
+            exit;
         }
     }
-    if (isset($_POST[$field_name . '_url']) && trim($_POST[$field_name . '_url']) !== '') {
-        return trim($_POST[$field_name . '_url']);
-    }
-    return $fallback_url;
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_type'])) {
-    $action_type = $_POST['action_type'];
-    try {
-        if ($action_type === 'save_settings') {
-            $logo_url = handle_image_upload('logo_file', $_POST['logo_url'] ?? '');
-            $settings_to_save = [
-                'site_title' => trim($_POST['site_title'] ?? ''),
-                'site_subtitle' => trim($_POST['site_subtitle'] ?? ''),
-                'logo_url' => $logo_url,
-                'primary_color' => trim($_POST['primary_color'] ?? '#4f46e5'),
-                'secondary_color' => trim($_POST['secondary_color'] ?? '#ec4899'),
-                'top_bar_text' => trim($_POST['top_bar_text'] ?? ''),
-                'top_bar_phone' => trim($_POST['top_bar_phone'] ?? ''),
-                'show_hero_slider' => trim($_POST['show_hero_slider'] ?? '1'),
-                'show_categories' => trim($_POST['show_categories'] ?? '1'),
-                'categories_title' => trim($_POST['categories_title'] ?? ''),
-                'show_middle_banners' => trim($_POST['show_middle_banners'] ?? '1'),
-                'show_special_offers' => trim($_POST['show_special_offers'] ?? '1'),
-                'special_offers_title' => trim($_POST['special_offers_title'] ?? ''),
-                'show_latest_products' => trim($_POST['show_latest_products'] ?? '1'),
-                'latest_products_title' => trim($_POST['latest_products_title'] ?? ''),
-                'show_blog_slider' => trim($_POST['show_blog_slider'] ?? '1'),
-                'blog_slider_title' => trim($_POST['blog_slider_title'] ?? ''),
-                'footer_col1_title' => trim($_POST['footer_col1_title'] ?? ''),
-                'footer_about' => trim($_POST['footer_about'] ?? ''),
-                'footer_col2_title' => trim($_POST['footer_col2_title'] ?? ''),
-                'footer_col2_links' => trim($_POST['footer_col2_links'] ?? ''),
-                'footer_col3_title' => trim($_POST['footer_col3_title'] ?? ''),
-                'footer_col3_links' => trim($_POST['footer_col3_links'] ?? ''),
-                'footer_col4_title' => trim($_POST['footer_col4_title'] ?? ''),
-                'footer_copyright' => trim($_POST['footer_copyright'] ?? ''),
-                'custom_social_networks' => trim($_POST['custom_social_networks'] ?? '[]'),
-                'trust_badges' => trim($_POST['trust_badges'] ?? '')
-            ];
-            $stmt = $db->prepare("INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)");
-            foreach ($settings_to_save as $k => $v) {
-                $stmt->execute([$k, $v]);
-            }
-            header("Location: admin.php?view=settings&msg=" . urlencode("تنظیمات با موفقیت ذخیره شد."));
-            exit;
-        } elseif ($action_type === 'save_product') {
-            $id = intval($_POST['id'] ?? 0);
-            $title = trim($_POST['title'] ?? '');
-            $slug = trim($_POST['slug'] ?? '');
-            if (!$slug) { $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $title), '-')); }
-            if (!$slug) { $slug = 'product-' . time(); }
-            $category_slug = trim($_POST['category_slug'] ?? 'digital');
-            $price = intval($_POST['price'] ?? 0);
-            $old_price = intval($_POST['old_price'] ?? 0);
-            $image = handle_image_upload('image_file', $_POST['image'] ?? '');
-            $description = trim($_POST['description'] ?? '');
-            $external_link = trim($_POST['external_link'] ?? '');
-            $is_featured = isset($_POST['is_featured']) ? 1 : 0;
-            $is_special = isset($_POST['is_special']) ? 1 : 0;
-            
-            if ($id > 0) {
-                $stmt = $db->prepare("UPDATE products SET slug=?, title=?, category_slug=?, price=?, old_price=?, image=?, description=?, external_link=?, is_featured=?, is_special=? WHERE id=?");
-                $stmt->execute([$slug, $title, $category_slug, $price, $old_price, $image, $description, $external_link, $is_featured, $is_special, $id]);
-            } else {
-                $stmt = $db->prepare("INSERT INTO products (slug, title, category_slug, price, old_price, image, gallery, description, specs, external_link, is_featured, is_special) VALUES (?, ?, ?, ?, ?, ?, '[]', ?, '{}', ?, ?, ?)");
-                $stmt->execute([$slug, $title, $category_slug, $price, $old_price, $image, $description, $external_link, $is_featured, $is_special]);
-            }
-            header("Location: admin.php?view=products&msg=" . urlencode("محصول با موفقیت ذخیره شد."));
-            exit;
-        } elseif ($action_type === 'save_category') {
-            $id = intval($_POST['id'] ?? 0);
-            $name = trim($_POST['name'] ?? '');
-            $slug = trim($_POST['slug'] ?? '');
-            if (!$slug) { $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $name), '-')); }
-            if (!$slug) { $slug = 'cat-' . time(); }
-            $parent_id = intval($_POST['parent_id'] ?? 0);
-            $image = handle_image_upload('image_file', $_POST['image'] ?? '');
-            $sort_order = intval($_POST['sort_order'] ?? 0);
-            
-            if ($id > 0) {
-                $stmt = $db->prepare("UPDATE categories SET slug=?, name=?, parent_id=?, image=?, sort_order=? WHERE id=?");
-                $stmt->execute([$slug, $name, $parent_id, $image, $sort_order, $id]);
-            } else {
-                $stmt = $db->prepare("INSERT INTO categories (slug, name, parent_id, image, sort_order) VALUES (?, ?, ?, ?, ?)");
-                $stmt->execute([$slug, $name, $parent_id, $image, $sort_order]);
-            }
-            header("Location: admin.php?view=categories&msg=" . urlencode("دسته‌بندی با موفقیت ذخیره شد."));
-            exit;
-        } elseif ($action_type === 'save_page') {
-            $id = intval($_POST['id'] ?? 0);
-            $title = trim($_POST['title'] ?? '');
-            $slug = trim($_POST['slug'] ?? '');
-            if (!$slug) { $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $title), '-')); }
-            if (!$slug) { $slug = 'page-' . time(); }
-            $content = trim($_POST['content'] ?? '');
-            $is_published = isset($_POST['is_published']) ? 1 : 1;
-            
-            if ($id > 0) {
-                $stmt = $db->prepare("UPDATE pages SET slug=?, title=?, content=?, is_published=? WHERE id=?");
-                $stmt->execute([$slug, $title, $content, $is_published, $id]);
-            } else {
-                $stmt = $db->prepare("INSERT INTO pages (slug, title, content, is_published) VALUES (?, ?, ?, ?)");
-                $stmt->execute([$slug, $title, $content, $is_published]);
-            }
-            header("Location: admin.php?view=pages&msg=" . urlencode("برگه با موفقیت ذخیره شد."));
-            exit;
-        } elseif ($action_type === 'save_post') {
-            $id = intval($_POST['id'] ?? 0);
-            $title = trim($_POST['title'] ?? '');
-            $slug = trim($_POST['slug'] ?? '');
-            if (!$slug) { $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $title), '-')); }
-            if (!$slug) { $slug = 'post-' . time(); }
-            $author = trim($_POST['author'] ?? 'مدیر');
-            $image = handle_image_upload('image_file', $_POST['image'] ?? '');
-            $excerpt = trim($_POST['excerpt'] ?? '');
-            $content = trim($_POST['content'] ?? '');
-            
-            if ($id > 0) {
-                $stmt = $db->prepare("UPDATE posts SET slug=?, title=?, author=?, image=?, excerpt=?, content=? WHERE id=?");
-                $stmt->execute([$slug, $title, $author, $image, $excerpt, $content, $id]);
-            } else {
-                $stmt = $db->prepare("INSERT INTO posts (slug, title, author, image, excerpt, content) VALUES (?, ?, ?, ?, ?, ?)");
-                $stmt->execute([$slug, $title, $author, $image, $excerpt, $content]);
-            }
-            header("Location: admin.php?view=posts&msg=" . urlencode("مقاله با موفقیت ذخیره شد."));
-            exit;
-        } elseif ($action_type === 'save_slider') {
-            $id = intval($_POST['id'] ?? 0);
-            $title = trim($_POST['title'] ?? '');
-            $link = trim($_POST['link'] ?? '');
-            $image = handle_image_upload('image_file', $_POST['image'] ?? '');
-            $sort_order = intval($_POST['sort_order'] ?? 0);
-            
-            if ($id > 0) {
-                $stmt = $db->prepare("UPDATE sliders SET title=?, image=?, link=?, sort_order=? WHERE id=?");
-                $stmt->execute([$title, $image, $link, $sort_order, $id]);
-            } else {
-                $stmt = $db->prepare("INSERT INTO sliders (title, image, link, sort_order) VALUES (?, ?, ?, ?)");
-                $stmt->execute([$title, $image, $link, $sort_order]);
-            }
-            header("Location: admin.php?view=sliders&msg=" . urlencode("اسلاید با موفقیت ذخیره شد."));
-            exit;
-        } elseif ($action_type === 'save_banner') {
-            $id = intval($_POST['id'] ?? 0);
-            $title = trim($_POST['title'] ?? '');
-            $link = trim($_POST['link'] ?? '');
-            $position = trim($_POST['position'] ?? 'hero_side');
-            $image = handle_image_upload('image_file', $_POST['image'] ?? '');
-            $sort_order = intval($_POST['sort_order'] ?? 0);
-            
-            if ($id > 0) {
-                $stmt = $db->prepare("UPDATE banners SET title=?, image=?, link=?, position=?, sort_order=? WHERE id=?");
-                $stmt->execute([$title, $image, $link, $position, $sort_order, $id]);
-            } else {
-                $stmt = $db->prepare("INSERT INTO banners (title, image, link, position, sort_order) VALUES (?, ?, ?, ?, ?)");
-                $stmt->execute([$title, $image, $link, $position, $sort_order]);
-            }
-            header("Location: admin.php?view=sliders&msg=" . urlencode("بنر با موفقیت ذخیره شد."));
-            exit;
-        } elseif ($action_type === 'save_menu') {
-            $id = intval($_POST['id'] ?? 0);
-            $title = trim($_POST['title'] ?? '');
-            $link = trim($_POST['link'] ?? '');
-            $parent_id = intval($_POST['parent_id'] ?? 0);
-            $badge_text = trim($_POST['badge_text'] ?? '');
-            $badge_color = trim($_POST['badge_color'] ?? '#ef4444');
-            $is_mega = isset($_POST['is_mega']) ? 1 : 0;
-            $mega_content = trim($_POST['mega_content'] ?? '');
-            $sort_order = intval($_POST['sort_order'] ?? 0);
-            
-            if ($id > 0) {
-                $stmt = $db->prepare("UPDATE menus SET title=?, link=?, parent_id=?, badge_text=?, badge_color=?, is_mega=?, mega_content=?, sort_order=? WHERE id=?");
-                $stmt->execute([$title, $link, $parent_id, $badge_text, $badge_color, $is_mega, $mega_content, $sort_order, $id]);
-            } else {
-                $stmt = $db->prepare("INSERT INTO menus (title, link, parent_id, badge_text, badge_color, is_mega, mega_content, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-                $stmt->execute([$title, $link, $parent_id, $badge_text, $badge_color, $is_mega, $mega_content, $sort_order]);
-            }
-            header("Location: admin.php?view=menus&msg=" . urlencode("فهرست با موفقیت ذخیره شد."));
-            exit;
-        } elseif ($action_type === 'save_profile') {
-            $admin_user = trim($_POST['admin_user'] ?? 'admin');
-            $admin_pass = trim($_POST['admin_pass'] ?? '');
-            $admin_email = trim($_POST['admin_email'] ?? 'admin@ariastore.ir');
-            if ($admin_pass) {
-                $stmt = $db->prepare("UPDATE admin_users SET username=?, password=?, email=? WHERE id=1");
-                $stmt->execute([$admin_user, $admin_pass, $admin_email]);
-            } else {
-                $stmt = $db->prepare("UPDATE admin_users SET username=?, email=? WHERE id=1");
-                $stmt->execute([$admin_user, $admin_email]);
-            }
-            $_SESSION['admin_user'] = $admin_user;
-            header("Location: admin.php?view=profile&msg=" . urlencode("پروفایل با موفقیت به‌روزرسانی شد."));
-            exit;
-        } elseif ($action_type === 'reply_comment') {
-            $id = intval($_POST['id'] ?? 0);
-            $reply_text = trim($_POST['reply_text'] ?? '');
-            $stmt = $db->prepare("UPDATE comments SET reply_text=? WHERE id=?");
-            $stmt->execute([$reply_text, $id]);
-            header("Location: admin.php?view=comments&msg=" . urlencode("پاسخ به دیدگاه ثبت شد."));
-            exit;
-        } elseif ($action_type === 'save_scripts') {
-            $head_scripts = trim($_POST['head_scripts'] ?? '');
-            $body_scripts = trim($_POST['body_scripts'] ?? '');
-            $footer_scripts = trim($_POST['footer_scripts'] ?? '');
-            $stmt = $db->prepare("INSERT OR REPLACE INTO settings (key, value) VALUES ('head_scripts', ?), ('body_scripts', ?), ('footer_scripts', ?)");
-            $stmt->execute([$head_scripts, $body_scripts, $footer_scripts]);
-            header("Location: admin.php?view=scripts&msg=" . urlencode("اسکریپت‌ها با موفقیت ذخیره شدند."));
-            exit;
-        } elseif ($action_type === 'import_json') {
-            if (isset($_FILES['backup_file']) && $_FILES['backup_file']['error'] === UPLOAD_ERR_OK) {
-                $json_data = file_get_contents($_FILES['backup_file']['tmp_name']);
-                $data = json_decode($json_data, true);
-                if ($data && is_array($data)) {
-                    foreach ($data as $table => $rows) {
-                        if (is_array($rows) && count($rows) > 0) {
-                            foreach ($rows as $row) {
-                                $keys = array_keys($row);
-                                $cols = implode(', ', $keys);
-                                $placeholders = implode(', ', array_fill(0, count($keys), '?'));
-                                $vals = array_values($row);
-                                $stmt = $db->prepare("INSERT OR REPLACE INTO {$table} ({$cols}) VALUES ({$placeholders})");
-                                $stmt->execute($vals);
-                            }
+    $action = $_POST['action_type'];
+
+    if ($action == 'save_settings') {
+        $fields = ['site_title','site_subtitle','logo_url','primary_color','secondary_color','top_bar_text','top_bar_phone',
+                   'show_hero_slider','show_categories','categories_title','show_middle_banners','show_special_offers',
+                   'special_offers_title','show_latest_products','latest_products_title','show_blog_slider','blog_slider_title',
+                   'footer_col1_title','footer_about','footer_col2_title','footer_col2_links','footer_col3_title','footer_col3_links',
+                   'footer_col4_title','footer_copyright','custom_social_networks','trust_badges'];
+        foreach ($fields as $f) {
+            $val = $_POST[$f] ?? '';
+            $db->prepare("INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)")->execute([$f, $val]);
+        }
+        header("Location: admin.php?view=settings&msg=" . urlencode("تنظیمات با موفقیت ذخیره شد."));
+        exit;
+    }
+
+    if ($action == 'save_product') {
+        $id = $_POST['id'] ?? null;
+        $title = $_POST['title'] ?? '';
+        $slug = $_POST['slug'] ?? '';
+        $category_slug = $_POST['category_slug'] ?? '';
+        $price = intval($_POST['price'] ?? 0);
+        $old_price = intval($_POST['old_price'] ?? 0);
+        $image = $_POST['image'] ?? '';
+        $gallery_raw = $_POST['gallery'] ?? '';
+        $gallery = json_encode(array_filter(array_map('trim', explode("\n", $gallery_raw))), JSON_UNESCAPED_UNICODE);
+        $description = $_POST['description'] ?? '';
+        $specs_raw = $_POST['specs_raw'] ?? '';
+        $specs = [];
+        foreach (array_filter(array_map('trim', explode("\n", $specs_raw))) as $line) {
+            $parts = explode(':', $line, 2);
+            if (count($parts) === 2) $specs[trim($parts[0])] = trim($parts[1]);
+        }
+        $specs_json = json_encode($specs, JSON_UNESCAPED_UNICODE);
+        $variables = $_POST['variables_json'] ?? '';
+        $external_link = $_POST['external_link'] ?? '';
+        $is_featured = isset($_POST['is_featured']) ? 1 : 0;
+        $is_special = isset($_POST['is_special']) ? 1 : 0;
+
+        if ($id) {
+            $stmt = $db->prepare("UPDATE products SET title=?, slug=?, category_slug=?, price=?, old_price=?, image=?, gallery=?, description=?, specs=?, variables=?, external_link=?, is_featured=?, is_special=? WHERE id=?");
+            $stmt->execute([$title, $slug, $category_slug, $price, $old_price, $image, $gallery, $description, $specs_json, $variables, $external_link, $is_featured, $is_special, $id]);
+        } else {
+            $stmt = $db->prepare("INSERT INTO products (title, slug, category_slug, price, old_price, image, gallery, description, specs, variables, external_link, is_featured, is_special) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$title, $slug, $category_slug, $price, $old_price, $image, $gallery, $description, $specs_json, $variables, $external_link, $is_featured, $is_special]);
+        }
+        header("Location: admin.php?view=products&msg=" . urlencode("محصول با موفقیت ذخیره شد."));
+        exit;
+    }
+
+    if ($action == 'save_category') {
+        $name = $_POST['name'] ?? '';
+        $slug = $_POST['slug'] ?? '';
+        $image = $_POST['image'] ?? '';
+        $db->prepare("INSERT INTO categories (name, slug, image) VALUES (?, ?, ?)")->execute([$name, $slug, $image]);
+        header("Location: admin.php?view=categories&msg=" . urlencode("دسته‌بندی با موفقیت اضافه شد."));
+        exit;
+    }
+
+    if ($action == 'save_menu') {
+        $id = $_POST['id'] ?? null;
+        $title = $_POST['title'] ?? '';
+        $link = $_POST['link'] ?? '';
+        $badge_text = $_POST['badge_text'] ?? '';
+        $badge_color = $_POST['badge_color'] ?? '#ef4444';
+        $is_mega = isset($_POST['is_mega']) ? 1 : 0;
+        $mega_content = $_POST['mega_content'] ?? '';
+
+        if ($id) {
+            $stmt = $db->prepare("UPDATE menus SET title=?, link=?, badge_text=?, badge_color=?, is_mega=?, mega_content=? WHERE id=?");
+            $stmt->execute([$title, $link, $badge_text, $badge_color, $is_mega, $mega_content, $id]);
+        } else {
+            $stmt = $db->prepare("INSERT INTO menus (title, link, badge_text, badge_color, is_mega, mega_content) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$title, $link, $badge_text, $badge_color, $is_mega, $mega_content]);
+        }
+        header("Location: admin.php?view=menus&msg=" . urlencode("منو با موفقیت ذخیره شد."));
+        exit;
+    }
+
+    if ($action == 'save_slider') {
+        $title = $_POST['title'] ?? '';
+        $image = $_POST['image'] ?? '';
+        $link = $_POST['link'] ?? '';
+        $db->prepare("INSERT INTO sliders (title, image, link) VALUES (?, ?, ?)")->execute([$title, $image, $link]);
+        header("Location: admin.php?view=sliders&msg=" . urlencode("اسلاید با موفقیت اضافه شد."));
+        exit;
+    }
+
+    if ($action == 'save_banner') {
+        $title = $_POST['title'] ?? '';
+        $image = $_POST['image'] ?? '';
+        $link = $_POST['link'] ?? '';
+        $position = $_POST['position'] ?? 'home_middle';
+        $db->prepare("INSERT INTO banners (title, image, link, position) VALUES (?, ?, ?, ?)")->execute([$title, $image, $link, $position]);
+        header("Location: admin.php?view=sliders&msg=" . urlencode("بنر با موفقیت اضافه شد."));
+        exit;
+    }
+
+    if ($action == 'save_post') {
+        $id = $_POST['id'] ?? null;
+        $title = $_POST['title'] ?? '';
+        $slug = $_POST['slug'] ?? '';
+        $author = $_POST['author'] ?? 'مدیر';
+        $image = $_POST['image'] ?? '';
+        $excerpt = $_POST['excerpt'] ?? '';
+        $content = $_POST['content'] ?? '';
+
+        if ($id) {
+            $stmt = $db->prepare("UPDATE posts SET title=?, slug=?, author=?, image=?, excerpt=?, content=? WHERE id=?");
+            $stmt->execute([$title, $slug, $author, $image, $excerpt, $content, $id]);
+        } else {
+            $stmt = $db->prepare("INSERT INTO posts (title, slug, author, image, excerpt, content) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$title, $slug, $author, $image, $excerpt, $content]);
+        }
+        header("Location: admin.php?view=posts&msg=" . urlencode("مقاله با موفقیت ذخیره شد."));
+        exit;
+    }
+
+    if ($action == 'save_page') {
+        $id = $_POST['id'] ?? null;
+        $title = $_POST['title'] ?? '';
+        $slug = $_POST['slug'] ?? '';
+        $content = $_POST['content'] ?? '';
+
+        if ($id) {
+            $stmt = $db->prepare("UPDATE pages SET title=?, slug=?, content=? WHERE id=?");
+            $stmt->execute([$title, $slug, $content, $id]);
+        } else {
+            $stmt = $db->prepare("INSERT INTO pages (title, slug, content) VALUES (?, ?, ?)");
+            $stmt->execute([$title, $slug, $content]);
+        }
+        header("Location: admin.php?view=pages&msg=" . urlencode("برگه با موفقیت ذخیره شد."));
+        exit;
+    }
+
+    if ($action == 'reply_comment') {
+        $id = intval($_POST['id'] ?? 0);
+        $reply_text = $_POST['reply_text'] ?? '';
+        if ($id && $reply_text) {
+            $db->prepare("UPDATE comments SET reply_text=? WHERE id=?")->execute([$reply_text, $id]);
+        }
+        header("Location: admin.php?view=comments&msg=" . urlencode("پاسخ با موفقیت ثبت شد."));
+        exit;
+    }
+
+    if ($action == 'save_scripts') {
+        $db->prepare("INSERT OR REPLACE INTO settings (key, value) VALUES ('head_scripts', ?)")->execute([$_POST['head_scripts'] ?? '']);
+        $db->prepare("INSERT OR REPLACE INTO settings (key, value) VALUES ('body_scripts', ?)")->execute([$_POST['body_scripts'] ?? '']);
+        $db->prepare("INSERT OR REPLACE INTO settings (key, value) VALUES ('footer_scripts', ?)")->execute([$_POST['footer_scripts'] ?? '']);
+        $db->prepare("INSERT OR REPLACE INTO settings (key, value) VALUES ('trust_badges', ?)")->execute([$_POST['trust_badges'] ?? '']);
+        header("Location: admin.php?view=scripts&msg=" . urlencode("کدهای سفارشی ذخیره شدند."));
+        exit;
+    }
+
+    if ($action == 'import_json') {
+        if (isset($_FILES['backup_file']) && $_FILES['backup_file']['error'] === UPLOAD_ERR_OK) {
+            $content = file_get_contents($_FILES['backup_file']['tmp_name']);
+            $data = json_decode($content, true);
+            if ($data && is_array($data)) {
+                foreach ($data as $table => $rows) {
+                    if (is_array($rows) && !empty($rows)) {
+                        $db->exec("DELETE FROM $table");
+                        foreach ($rows as $row) {
+                            $columns = implode(', ', array_keys($row));
+                            $placeholders = implode(', ', array_fill(0, count($row), '?'));
+                            $stmt = $db->prepare("INSERT INTO $table ($columns) VALUES ($placeholders)");
+                            $stmt->execute(array_values($row));
                         }
                     }
-                    header("Location: admin.php?view=backup&msg=" . urlencode("اطلاعات با موفقیت درون‌ریزی شد."));
-                    exit;
                 }
+                header("Location: admin.php?view=import_export&msg=" . urlencode("بکاپ با موفقیت بازیابی شد."));
+                exit;
             }
-            header("Location: admin.php?view=backup&msg=" . urlencode("خطا در درون‌ریزی فایل پشتیبان."));
-            exit;
         }
-    } catch (Exception $e) {
-        header("Location: admin.php?msg=" . urlencode("خطا: " . $e->getMessage()));
+        header("Location: admin.php?view=import_export&msg=" . urlencode("خطا در بازیابی فایل."));
+        exit;
+    }
+
+    if ($action == 'save_profile') {
+        $admin_user = $_POST['admin_user'] ?? 'admin';
+        $admin_pass = $_POST['admin_pass'] ?? '12345';
+        $admin_email = $_POST['admin_email'] ?? '';
+        $db->prepare("UPDATE admin_users SET username=?, password=?, email=? WHERE id=1")->execute([$admin_user, $admin_pass, $admin_email]);
+        header("Location: admin.php?view=profile&msg=" . urlencode("مشخصات مدیر با موفقیت به‌روزرسانی شد."));
         exit;
     }
 }
 
-}
-
-// -------------------------------------------------------------------------
-// 5. متغیرهای داشبورد
-// -------------------------------------------------------------------------
 $view = $_GET['view'] ?? 'dashboard';
 $products_count = $db->query("SELECT COUNT(*) FROM products")->fetchColumn();
 $posts_count = $db->query("SELECT COUNT(*) FROM posts")->fetchColumn();
@@ -643,7 +483,6 @@ $total_views = $db->query("SELECT SUM(views) FROM products")->fetchColumn() + $d
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"></noscript>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.2/tinymce.min.js"></script>
     <style>
-        /* ========== فونت و آیکون ========== */
         @font-face { font-family: 'Peyda'; src: url('peydaregular.woff2'); font-weight: 400; }
         @font-face { font-family: 'Peyda'; src: url('peydaextrabold.woff2'); font-weight: 800; }
 
@@ -658,7 +497,6 @@ $total_views = $db->query("SELECT SUM(views) FROM products")->fetchColumn() + $d
         }
         html.icons-loaded .material-symbols-outlined { color: inherit; }
 
-        /* ========== متغیرها ========== */
         :root {
             --primary: <?= $settings['primary_color'] ?: '#4f46e5' ?>;
             --primary-light: <?= ($settings['primary_color'] ?: '#4f46e5') . '1A' ?>;
@@ -673,12 +511,10 @@ $total_views = $db->query("SELECT SUM(views) FROM products")->fetchColumn() + $d
             --shadow: 0 10px 25px -5px rgba(0,0,0,0.4);
         }
 
-        /* ========== پایه ========== */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Peyda', Tahoma, sans-serif; }
         body { background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
         a { text-decoration: none; color: inherit; }
 
-        /* ========== سایدبار ========== */
         .sidebar {
             width: 250px; background: var(--sidebar-bg); color: var(--sidebar-text);
             display: flex; flex-direction: column; position: fixed; top: 0; right: 0; bottom: 0;
@@ -696,7 +532,6 @@ $total_views = $db->query("SELECT SUM(views) FROM products")->fetchColumn() + $d
         .badge-num { margin-right: auto; background: rgba(255,255,255,0.15); color: #fff; padding: 2px 8px; border-radius: 99px; font-size: 11px; font-weight: 800; }
         .sidebar-footer { padding: 14px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 11.5px; color: #94a3b8; text-align: center; line-height: 1.6; }
 
-        /* ========== محتوای اصلی ========== */
         .main-content { flex: 1; margin-right: 250px; display: flex; flex-direction: column; min-width: 0; transition: 0.3s; }
         .topbar {
             background: var(--card-bg); border-bottom: 1px solid var(--border);
@@ -747,7 +582,6 @@ $total_views = $db->query("SELECT SUM(views) FROM products")->fetchColumn() + $d
 
         .alert { padding: 14px 18px; border-radius: 12px; margin-bottom: 22px; font-weight: 700; font-size: 14px; background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; display:flex; align-items:center; gap:8px; }
 
-        /* ========== کلاس‌های ریسپانسیو ========== */
         .resp-grid-edit, .resp-grid-cat, .resp-grid-menu, .resp-grid-slider,
         .resp-grid-post, .resp-grid-2, .resp-grid-3 {
             display: grid; gap: 24px;
@@ -765,7 +599,6 @@ $total_views = $db->query("SELECT SUM(views) FROM products")->fetchColumn() + $d
             background: rgba(0,0,0,0.5); z-index: 99; display: none;
         }
 
-        /* ========== Media Queries ========== */
         @media (max-width: 992px) {
             .sidebar { right: -280px; width: 260px; }
             .sidebar.active { right: 0; }
@@ -810,26 +643,6 @@ $total_views = $db->query("SELECT SUM(views) FROM products")->fetchColumn() + $d
         }
         setTimeout(() => document.documentElement.classList.add('icons-loaded'), 900);
     </script>
-
-<script>
-function previewImage(input, targetId) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            var target = document.getElementById(targetId);
-            if (target) {
-                target.value = e.target.result; // or update preview img
-            }
-            var previewEl = document.getElementById(targetId + '-preview');
-            if (previewEl) {
-                previewEl.src = e.target.result;
-                previewEl.style.display = 'block';
-            }
-        }
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-</script>
 </head>
 <body>
     <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
@@ -894,7 +707,6 @@ function previewImage(input, targetId) {
                 <div class="alert"><span class="material-symbols-outlined">check</span> <span><?= htmlspecialchars($_GET['msg']) ?></span></div>
             <?php endif; ?>
 
-            <!-- ========== همه ویوها با گریدهای ریسپانسیو ========== -->
             <?php if ($view === 'dashboard'): ?>
                 <div class="page-header">
                     <h1>داشبورد مدیریت اریا استور</h1>
@@ -943,7 +755,7 @@ function previewImage(input, targetId) {
                     <h1><?= $prod['id'] ? 'ویرایش محصول: ' . htmlspecialchars($prod['title']) : 'افزودن محصول جدید' ?></h1>
                     <a href="admin.php?view=products" class="btn" style="background:var(--card-bg); border:1px solid var(--border);">← بازگشت</a>
                 </div>
-                <form method="POST" action="admin.php" enctype="multipart/form-data">
+                <form method="POST" action="admin.php">
                     <input type="hidden" name="action_type" value="save_product">
                     <?php if($prod['id']): ?><input type="hidden" name="id" value="<?= $prod['id'] ?>"><?php endif; ?>
                     <div class="resp-grid-edit">
@@ -954,10 +766,10 @@ function previewImage(input, targetId) {
                                     <label>توضیحات محصول (قابلیت تغییر بین ویرایشگر بصری و ویرایش مستقیم کد HTML/IFrame)</label>
                                     <div class="rich-toolbar">
                                         <div class="rich-toolbar-left">
-                                            <button type="button" class="rich-btn" onclick="insertHtml('<h3>عنوان جدید</h3>')">H3</button>
-                                            <button type="button" class="rich-btn" onclick="insertHtml('<strong>پررنگ</strong>')">B</button>
-                                            <button type="button" class="rich-btn" onclick="insertHtml('<ul><li>آیتم اول</li></ul>')">لیست</button>
-                                            <button type="button" class="rich-btn" onclick="insertHtml('<iframe src=\'...\' width=\'100%\' height=\'320\' allowfullscreen></iframe>')">IFrame</button>
+                                            <button type="button" class="rich-btn" onclick="insertHtmlIntoEditor('editor-textarea', '<h3>عنوان جدید</h3>')">H3</button>
+                                            <button type="button" class="rich-btn" onclick="insertHtmlIntoEditor('editor-textarea', '<strong>پررنگ</strong>')">B</button>
+                                            <button type="button" class="rich-btn" onclick="insertHtmlIntoEditor('editor-textarea', '<ul><li>آیتم اول</li></ul>')">لیست</button>
+                                            <button type="button" class="rich-btn" onclick="insertHtmlIntoEditor('editor-textarea', '<iframe src=\'...\' width=\'100%\' height=\'320\' allowfullscreen></iframe>')">IFrame</button>
                                         </div>
                                         <div class="rich-toolbar-right">
                                             <button type="button" id="btn-mode-visual-editor-textarea" class="rich-btn active" onclick="switchEditorMode('editor-textarea', 'visual')"><span class="material-symbols-outlined" style="font-size:16px;">visibility</span> ویرایشگر بصری</button>
@@ -1005,7 +817,7 @@ function previewImage(input, targetId) {
                 <div class="resp-grid-cat">
                     <div class="card">
                         <div class="card-title">افزودن دسته‌بندی</div>
-                        <form method="POST" action="admin.php" enctype="multipart/form-data">
+                        <form method="POST" action="admin.php">
                             <input type="hidden" name="action_type" value="save_category">
                             <div class="form-group"><label>نام دسته‌بندی</label><input type="text" name="name" class="form-control" required placeholder="کالای دیجیتال"></div>
                             <div class="form-group"><label>نامک انگلیسی (Slug)</label><input type="text" name="slug" class="form-control" required placeholder="digital"></div>
@@ -1031,7 +843,7 @@ function previewImage(input, targetId) {
                 <div class="resp-grid-menu">
                     <div class="card">
                         <div class="card-title"><?= $menu_item['id'] ? 'ویرایش آیتم منو' : 'افزودن آیتم فهرست جدید' ?></div>
-                        <form method="POST" action="admin.php" enctype="multipart/form-data" onsubmit="serializeGraphicalMegaMenu()">
+                        <form method="POST" action="admin.php" onsubmit="serializeGraphicalMegaMenu()">
                             <input type="hidden" name="action_type" value="save_menu">
                             <?php if($menu_item['id']): ?><input type="hidden" name="id" value="<?= $menu_item['id'] ?>"><?php endif; ?>
                             <input type="hidden" name="mega_content" id="mega-content-input" value="<?= htmlspecialchars($menu_item['mega_content']) ?>">
@@ -1075,7 +887,7 @@ function previewImage(input, targetId) {
                     <div class="card">
                         <div class="card-title">فهرست‌های فعال در هدر سایت</div>
                         <table class="table"><thead><tr><th>عنوان</th><th>لینک</th><th>برچسب</th><th>مگامنو</th><th>عملیات</th></tr></thead><tbody>
-                        <?php $menus=$db->query("SELECT * FROM menus ORDER BY id ASC")->fetchAll(); foreach($menus as $m): ?>
+                        <?php $menus_list=$db->query("SELECT * FROM menus ORDER BY id ASC")->fetchAll(); foreach($menus_list as $m): ?>
                             <tr><td><strong><?= htmlspecialchars($m['title']) ?></strong></td><td><code><?= htmlspecialchars($m['link']) ?></code></td><td><?= $m['badge_text']?'<span style="background:'.htmlspecialchars($m['badge_color']).';color:#fff;padding:2px 8px;border-radius:99px;font-size:11px;">'.htmlspecialchars($m['badge_text']).'</span>':'-' ?></td><td><?= $m['is_mega']?'<span style="color:#22c55e;font-weight:800;">فعال</span>':'ساده' ?></td><td><a href="admin.php?view=edit_menu&id=<?= $m['id'] ?>" class="btn btn-sm btn-primary">ویرایش</a> <a href="admin.php?action=del_menu&id=<?= $m['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('حذف شود؟')">حذف</a></td></tr>
                         <?php endforeach; ?></tbody></table>
                     </div>
@@ -1086,7 +898,7 @@ function previewImage(input, targetId) {
                 <div class="resp-grid-slider" style="margin-bottom:30px;">
                     <div class="card">
                         <div class="card-title">افزودن اسلاید به هدر</div>
-                        <form method="POST" action="admin.php" enctype="multipart/form-data">
+                        <form method="POST" action="admin.php">
                             <input type="hidden" name="action_type" value="save_slider">
                             <div class="form-group"><label>عنوان داخلی</label><input type="text" name="title" class="form-control" required placeholder="اسلاید جشنواره"></div>
                             <div class="form-group"><label>آدرس تصویر بنر (URL)</label><input type="text" name="image" class="form-control" required></div>
@@ -1105,7 +917,7 @@ function previewImage(input, targetId) {
                 <div class="resp-grid-slider">
                     <div class="card">
                         <div class="card-title">افزودن بنر تبلیغاتی</div>
-                        <form method="POST" action="admin.php" enctype="multipart/form-data">
+                        <form method="POST" action="admin.php">
                             <input type="hidden" name="action_type" value="save_banner">
                             <div class="form-group"><label>عنوان داخلی بنر</label><input type="text" name="title" class="form-control" required></div>
                             <div class="form-group"><label>آدرس تصویر (URL)</label><input type="text" name="image" class="form-control" required></div>
@@ -1117,7 +929,7 @@ function previewImage(input, targetId) {
                     <div class="card">
                         <div class="card-title">بنرهای فعال در سایت</div>
                         <table class="table"><thead><tr><th>تصویر</th><th>عنوان</th><th>موقعیت</th><th>عملیات</th></tr></thead><tbody>
-                        <?php $banners=$db->query("SELECT * FROM banners ORDER BY id ASC")->fetchAll(); foreach($banners as $b): ?>
+                        <?php $banners_list=$db->query("SELECT * FROM banners ORDER BY id ASC")->fetchAll(); foreach($banners_list as $b): ?>
                             <tr><td><img src="<?= htmlspecialchars($b['image']) ?>" alt="" style="width:70px;height:40px;object-fit:cover;border-radius:6px;"></td><td><strong><?= htmlspecialchars($b['title']) ?></strong></td><td><?= $b['position']=='home_middle'?'<span style="color:#ef4444;font-weight:700;">وسط صفحه اصلی</span>':'کنار اسلایدر' ?></td><td><a href="admin.php?action=del_banner&id=<?= $b['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('حذف شود؟')">حذف</a></td></tr>
                         <?php endforeach; ?></tbody></table>
                     </div>
@@ -1126,7 +938,7 @@ function previewImage(input, targetId) {
             <?php elseif ($view === 'posts'): ?>
                 <div class="page-header"><h1>مقالات وبلاگ</h1><a href="admin.php?view=edit_post" class="btn btn-primary"><span class="material-symbols-outlined" style="font-size:18px;">add</span> نوشتن مقاله جدید</a></div>
                 <div class="card"><table class="table"><thead><tr><th>تصویر</th><th>عنوان مقاله</th><th>نویسنده</th><th>بازدید</th><th>عملیات</th></tr></thead><tbody>
-                <?php $posts=$db->query("SELECT * FROM posts ORDER BY id DESC")->fetchAll(); foreach($posts as $po): ?>
+                <?php $posts_list=$db->query("SELECT * FROM posts ORDER BY id DESC")->fetchAll(); foreach($posts_list as $po): ?>
                     <tr><td><img src="<?= htmlspecialchars($po['image']) ?>" alt="" style="width:50px;height:36px;border-radius:6px;object-fit:cover;"></td><td><strong><?= htmlspecialchars($po['title']) ?></strong></td><td><?= htmlspecialchars($po['author']) ?></td><td><?= $po['views'] ?></td><td><a href="index.php?post=<?= $po['slug'] ?>" target="_blank" class="btn btn-sm" style="background:var(--bg); border:1px solid var(--border);">نمایش</a> <a href="admin.php?view=edit_post&id=<?= $po['id'] ?>" class="btn btn-sm btn-primary">ویرایش</a> <a href="admin.php?action=del_post&id=<?= $po['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('حذف شود؟')">حذف</a></td></tr>
                 <?php endforeach; ?></tbody></table></div>
 
@@ -1138,7 +950,7 @@ function previewImage(input, targetId) {
                     <h1><?= $post['id'] ? 'ویرایش مقاله: ' . htmlspecialchars($post['title']) : 'نوشتن مقاله جدید' ?></h1>
                     <a href="admin.php?view=posts" class="btn" style="background:var(--card-bg); border:1px solid var(--border);">← بازگشت</a>
                 </div>
-                <form method="POST" action="admin.php" enctype="multipart/form-data">
+                <form method="POST" action="admin.php">
                     <input type="hidden" name="action_type" value="save_post">
                     <?php if($post['id']): ?><input type="hidden" name="id" value="<?= $post['id'] ?>"><?php endif; ?>
                     <div class="resp-grid-post">
@@ -1149,8 +961,8 @@ function previewImage(input, targetId) {
                                 <label>متن مقاله (قابلیت تغییر بین ویرایشگر بصری و ویرایش مستقیم کد HTML/IFrame)</label>
                                 <div class="rich-toolbar">
                                     <div class="rich-toolbar-left">
-                                        <button type="button" class="rich-btn" onclick="insertHtml('<h3>عنوان جدید</h3>')">H3</button>
-                                        <button type="button" class="rich-btn" onclick="insertHtml('<strong>پررنگ</strong>')">B</button>
+                                        <button type="button" class="rich-btn" onclick="insertHtmlIntoEditor('editor-textarea-post', '<h3>عنوان جدید</h3>')">H3</button>
+                                        <button type="button" class="rich-btn" onclick="insertHtmlIntoEditor('editor-textarea-post', '<strong>پررنگ</strong>')">B</button>
                                     </div>
                                     <div class="rich-toolbar-right">
                                         <button type="button" id="btn-mode-visual-editor-textarea-post" class="rich-btn active" onclick="switchEditorMode('editor-textarea-post', 'visual')"><span class="material-symbols-outlined" style="font-size:16px;">visibility</span> ویرایشگر بصری</button>
@@ -1171,7 +983,7 @@ function previewImage(input, targetId) {
             <?php elseif ($view === 'pages'): ?>
                 <div class="page-header"><h1>مدیریت برگه‌های سایت</h1><a href="admin.php?view=edit_page" class="btn btn-primary"><span class="material-symbols-outlined" style="font-size:18px;">add</span> ایجاد برگه جدید</a></div>
                 <div class="card"><table class="table"><thead><tr><th>عنوان برگه</th><th>آدرس (Slug)</th><th>عملیات</th></tr></thead><tbody>
-                <?php $pages=$db->query("SELECT * FROM pages ORDER BY id DESC")->fetchAll(); foreach($pages as $pa): ?>
+                <?php $pages_list=$db->query("SELECT * FROM pages ORDER BY id DESC")->fetchAll(); foreach($pages_list as $pa): ?>
                     <tr><td><strong><?= htmlspecialchars($pa['title']) ?></strong></td><td><code>?page=<?= htmlspecialchars($pa['slug']) ?></code></td><td><a href="index.php?page=<?= $pa['slug'] ?>" target="_blank" class="btn btn-sm" style="background:var(--bg); border:1px solid var(--border);">نمایش</a> <a href="admin.php?view=edit_page&id=<?= $pa['id'] ?>" class="btn btn-sm btn-primary">ویرایش</a> <a href="admin.php?action=del_page&id=<?= $pa['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('حذف شود؟')">حذف</a></td></tr>
                 <?php endforeach; ?></tbody></table></div>
 
@@ -1183,7 +995,7 @@ function previewImage(input, targetId) {
                     <h1><?= $page_row['id'] ? 'ویرایش برگه: ' . htmlspecialchars($page_row['title']) : 'ایجاد برگه جدید' ?></h1>
                     <a href="admin.php?view=pages" class="btn" style="background:var(--card-bg); border:1px solid var(--border);">← بازگشت</a>
                 </div>
-                <form method="POST" action="admin.php" enctype="multipart/form-data">
+                <form method="POST" action="admin.php">
                     <input type="hidden" name="action_type" value="save_page">
                     <?php if($page_row['id']): ?><input type="hidden" name="id" value="<?= $page_row['id'] ?>"><?php endif; ?>
                     <div class="card">
@@ -1192,7 +1004,7 @@ function previewImage(input, targetId) {
                         <div class="form-group">
                             <label>محتوای برگه (قابلیت تغییر بین ویرایشگر بصری و ویرایش مستقیم کد HTML/IFrame)</label>
                             <div class="rich-toolbar">
-                                <div class="rich-toolbar-left"><button type="button" class="rich-btn" onclick="insertHtml('<h3>عنوان جدید</h3>')">H3</button></div>
+                                <div class="rich-toolbar-left"><button type="button" class="rich-btn" onclick="insertHtmlIntoEditor('editor-textarea-page', '<h3>عنوان جدید</h3>')">H3</button></div>
                                 <div class="rich-toolbar-right">
                                     <button type="button" id="btn-mode-visual-editor-textarea-page" class="rich-btn active" onclick="switchEditorMode('editor-textarea-page', 'visual')"><span class="material-symbols-outlined" style="font-size:16px;">visibility</span> ویرایشگر بصری</button>
                                     <button type="button" id="btn-mode-html-editor-textarea-page" class="rich-btn" onclick="switchEditorMode('editor-textarea-page', 'html')"><span class="material-symbols-outlined" style="font-size:16px;">code</span> ویرایش مستقیم کد HTML</button>
@@ -1207,15 +1019,15 @@ function previewImage(input, targetId) {
             <?php elseif ($view === 'comments'): ?>
                 <div class="page-header"><h1>مدیریت دیدگاه‌ها و نظرات کاربران</h1></div>
                 <div class="card"><table class="table"><thead><tr><th>کاربر</th><th>محصول/مقاله</th><th>متن دیدگاه</th><th>امتیاز</th><th>پاسخ مدیریت</th><th>عملیات</th></tr></thead><tbody>
-                <?php $comments=$db->query("SELECT * FROM comments ORDER BY id DESC")->fetchAll(); if(empty($comments)): ?>
+                <?php $comments_list=$db->query("SELECT * FROM comments ORDER BY id DESC")->fetchAll(); if(empty($comments_list)): ?>
                     <tr><td colspan="6" style="text-align:center; padding:30px; color:var(--muted);">هنوز هیچ دیدگاهی ثبت نشده است.</td></tr>
-                <?php else: foreach($comments as $cm): ?>
+                <?php else: foreach($comments_list as $cm): ?>
                     <tr><td><strong><?= htmlspecialchars($cm['name']) ?></strong></td><td><code><?= htmlspecialchars($cm['item_slug']) ?></code></td><td><?= htmlspecialchars($cm['comment']) ?></td><td><span style="color:#f59e0b;"><?= str_repeat('★', $cm['rating']) ?></span></td><td><?= !empty($cm['reply_text'])?'<span style="color:var(--primary); font-weight:700;">'.htmlspecialchars($cm['reply_text']).'</span>':'<span style="color:var(--muted);">-</span>' ?></td><td style="min-width:160px;"><button onclick="openReplyModal(<?= $cm['id'] ?>, '<?= htmlspecialchars(addslashes($cm['name'])) ?>')" class="btn btn-sm btn-primary">پاسخ</button> <a href="admin.php?action=del_comment&id=<?= $cm['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('حذف شود؟')">حذف</a></td></tr>
                 <?php endforeach; endif; ?></tbody></table></div>
                 <div id="reply-modal" style="position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.6); display:none; align-items:center; justify-content:center; z-index:9999;">
                     <div style="background:var(--card-bg); padding:30px; border-radius:20px; max-width:440px; width:90%; border:1px solid var(--border); box-shadow:var(--shadow);">
                         <h3 style="margin-bottom:16px;">پاسخ به دیدگاه <span id="reply-user-name" style="color:var(--primary);"></span></h3>
-                        <form method="POST" action="admin.php" enctype="multipart/form-data">
+                        <form method="POST" action="admin.php">
                             <input type="hidden" name="action_type" value="reply_comment">
                             <input type="hidden" name="id" id="reply-comment-id">
                             <textarea name="reply_text" rows="4" class="form-control" placeholder="پاسخ مدیریت اریا استور را بنویسید..." required></textarea>
@@ -1229,7 +1041,7 @@ function previewImage(input, targetId) {
 
             <?php elseif ($view === 'scripts'): ?>
                 <div class="page-header"><h1>اسکریپت‌ها، کدها و نمادهای رسمی (اینماد)</h1></div>
-                <form method="POST" action="admin.php" enctype="multipart/form-data">
+                <form method="POST" action="admin.php">
                     <input type="hidden" name="action_type" value="save_scripts">
                     <div class="card"><div class="card-title">اسکریپت‌های هدر (&lt;head&gt;)</div><textarea name="head_scripts" rows="4" class="form-control" style="direction:ltr;text-align:left;font-family:monospace;"><?= htmlspecialchars($settings['head_scripts']) ?></textarea></div>
                     <div class="card"><div class="card-title">اسکریپت‌های ابتدای بدنه (&lt;body&gt;)</div><textarea name="body_scripts" rows="4" class="form-control" style="direction:ltr;text-align:left;font-family:monospace;"><?= htmlspecialchars($settings['body_scripts']) ?></textarea></div>
@@ -1252,7 +1064,7 @@ function previewImage(input, targetId) {
                     <div class="card">
                         <div class="card-title">درون‌ریزی فایل پشتیبان (Import)</div>
                         <p style="color:var(--muted); margin-bottom:18px;">آپلود فایل بکاپ JSON برای بازیابی اطلاعات در پایگاه داده.</p>
-                        <form method="POST" action="admin.php" enctype="multipart/form-data" enctype="multipart/form-data">
+                        <form method="POST" action="admin.php" enctype="multipart/form-data">
                             <input type="hidden" name="action_type" value="import_json">
                             <input type="file" name="backup_file" class="form-control" accept=".json" required style="margin-bottom:12px;">
                             <button type="submit" class="btn btn-primary"><span class="material-symbols-outlined" style="font-size:18px;">upload</span> درون‌ریزی فایل</button>
@@ -1262,7 +1074,7 @@ function previewImage(input, targetId) {
 
             <?php elseif ($view === 'settings'): ?>
                 <div class="page-header"><h1>تنظیمات سایت، چیدمان، هدر، فوتر و شبکه‌های اجتماعی دلخواه</h1></div>
-                <form method="POST" action="admin.php" enctype="multipart/form-data" onsubmit="serializeCustomSocialNetworks()">
+                <form method="POST" action="admin.php" onsubmit="serializeCustomSocialNetworks()">
                     <input type="hidden" name="action_type" value="save_settings">
                     <input type="hidden" name="custom_social_networks" id="custom-socials-input" value="<?= htmlspecialchars($settings['custom_social_networks'] ?? '[]') ?>">
                     <div class="card">
@@ -1331,7 +1143,7 @@ function previewImage(input, targetId) {
             <?php elseif ($view === 'profile'): ?>
                 <div class="page-header"><h1>حساب کاربری مدیر</h1></div>
                 <div class="card" style="max-width:480px;">
-                    <form method="POST" action="admin.php" enctype="multipart/form-data">
+                    <form method="POST" action="admin.php">
                         <input type="hidden" name="action_type" value="save_profile">
                         <div class="form-group"><label>نام کاربری مدیر</label><input type="text" name="admin_user" class="form-control" value="<?= htmlspecialchars($admin_user) ?>" required></div>
                         <div class="form-group"><label>رمز عبور مدیر</label><input type="password" name="admin_pass" class="form-control" value="<?= htmlspecialchars($admin_pass) ?>" required></div>
@@ -1344,7 +1156,6 @@ function previewImage(input, targetId) {
     </main>
 
     <script>
-        // تمام توابع جاوااسکریپت بدون تغییر
         function initTinyMCE(selector) {
             if (typeof tinymce !== 'undefined') {
                 tinymce.init({
@@ -1379,10 +1190,10 @@ function previewImage(input, targetId) {
             }
         }
 
-        function insertHtml(htmlTag) {
-            const el = document.getElementById('editor-textarea') || document.getElementById('editor-textarea-post') || document.getElementById('editor-textarea-page');
-            if (typeof tinymce !== 'undefined' && tinymce.activeEditor && !tinymce.activeEditor.isHidden()) {
-                tinymce.activeEditor.execCommand('mceInsertContent', false, htmlTag);
+        function insertHtmlIntoEditor(textareaId, htmlTag) {
+            const el = document.getElementById(textareaId);
+            if (typeof tinymce !== 'undefined' && tinymce.get(textareaId) && !tinymce.get(textareaId).isHidden()) {
+                tinymce.get(textareaId).execCommand('mceInsertContent', false, htmlTag);
             } else if (el) {
                 const start = el.selectionStart, end = el.selectionEnd;
                 el.value = el.value.substring(0, start) + htmlTag + el.value.substring(end);
@@ -1396,19 +1207,109 @@ function previewImage(input, targetId) {
             if (wrap) wrap.style.display = (chk && chk.checked) ? 'block' : 'none';
         }
 
-        function addMegaColumn() { /* ... */ }
-        function addMegaLinkRow(btn) { /* ... */ }
-        function serializeGraphicalMegaMenu() { /* ... */ }
-        function addSocialNetworkRow() { /* ... */ }
-        function serializeCustomSocialNetworks() { /* ... */ }
+        function addMegaColumn() {
+            const list = document.getElementById('mega-columns-list');
+            if (!list) return;
+            const col = document.createElement('div');
+            col.className = 'mega-builder-col';
+            col.innerHTML = `
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                    <input type="text" class="form-control col-title-input" placeholder="عنوان ستون (مثال: دیجیتال)" style="width:75%;">
+                    <button type="button" class="btn btn-sm btn-danger" onclick="this.parentElement.parentElement.remove()">✕</button>
+                </div>
+                <div class="col-links-list"></div>
+                <button type="button" class="btn btn-sm" style="background:var(--bg); border:1px solid var(--border); margin-top:8px;" onclick="addMegaLinkRow(this)">+ افزودن لینک به این ستون</button>
+            `;
+            list.appendChild(col);
+        }
+
+        function addMegaLinkRow(btn) {
+            const parent = btn.previousElementSibling;
+            if (!parent || !parent.classList.contains('col-links-list')) return;
+            const row = document.createElement('div');
+            row.className = 'mega-link-row';
+            row.innerHTML = `
+                <input type="text" class="form-control link-title-input" placeholder="نام لینک" style="width:45%;">
+                <input type="text" class="form-control link-url-input" placeholder="آدرس لینک" style="width:45%;">
+                <button type="button" class="btn btn-sm btn-danger" onclick="this.parentElement.remove()">✕</button>
+            `;
+            parent.appendChild(row);
+        }
+
+        function serializeGraphicalMegaMenu() {
+            const columns = [];
+            document.querySelectorAll('.mega-builder-col').forEach(col => {
+                const titleInput = col.querySelector('.col-title-input');
+                const links = [];
+                col.querySelectorAll('.mega-link-row').forEach(row => {
+                    const title = row.querySelector('.link-title-input');
+                    const url = row.querySelector('.link-url-input');
+                    if (title && url && title.value.trim() && url.value.trim()) {
+                        links.push({ title: title.value.trim(), url: url.value.trim() });
+                    }
+                });
+                if (titleInput && titleInput.value.trim()) {
+                    columns.push({ title: titleInput.value.trim(), links: links });
+                }
+            });
+            const promoTitle = document.getElementById('promo-title-input');
+            const promoImage = document.getElementById('promo-image-input');
+            const promoUrl = document.getElementById('promo-url-input');
+            const mega = { columns: columns, promo: {} };
+            if (promoTitle && promoTitle.value.trim()) mega.promo.title = promoTitle.value.trim();
+            if (promoImage && promoImage.value.trim()) mega.promo.image = promoImage.value.trim();
+            if (promoUrl && promoUrl.value.trim()) mega.promo.url = promoUrl.value.trim();
+            document.getElementById('mega-content-input').value = JSON.stringify(mega, JSON_UNESCAPED_UNICODE);
+        }
+
+        function addSocialNetworkRow() {
+            const builder = document.getElementById('social-networks-builder');
+            if (!builder) return;
+            const row = document.createElement('div');
+            row.className = 'social-builder-row';
+            row.innerHTML = `
+                <input type="text" class="form-control soc-name-input" placeholder="نام شبکه" style="flex:1;">
+                <input type="text" class="form-control soc-url-input" placeholder="آدرس لینک" style="flex:2;">
+                <input type="text" class="form-control soc-png-input" placeholder="آدرس آیکون PNG" style="flex:2;">
+                <button type="button" class="btn btn-sm btn-danger" onclick="this.parentElement.remove()">✕</button>
+            `;
+            builder.appendChild(row);
+        }
+
+        function serializeCustomSocialNetworks() {
+            const networks = [];
+            document.querySelectorAll('.social-builder-row').forEach(row => {
+                const name = row.querySelector('.soc-name-input');
+                const url = row.querySelector('.soc-url-input');
+                const png = row.querySelector('.soc-png-input');
+                if (name && url && name.value.trim() && url.value.trim()) {
+                    networks.push({
+                        name: name.value.trim(),
+                        url: url.value.trim(),
+                        icon_png: (png && png.value.trim()) ? png.value.trim() : ''
+                    });
+                }
+            });
+            document.getElementById('custom-socials-input').value = JSON.stringify(networks, JSON_UNESCAPED_UNICODE);
+        }
+
         function toggleSidebar() {
             const sidebar = document.getElementById('admin-sidebar');
             const overlay = document.getElementById('sidebar-overlay');
             sidebar.classList.toggle('active');
             overlay.classList.toggle('active');
         }
-        function openReplyModal(id, name) { /* ... */ }
-        function closeReplyModal() { /* ... */ }
+
+        function openReplyModal(id, name) {
+            document.getElementById('reply-comment-id').value = id;
+            document.getElementById('reply-user-name').textContent = name;
+            document.getElementById('reply-modal').style.display = 'flex';
+        }
+
+        function closeReplyModal() {
+            document.getElementById('reply-modal').style.display = 'none';
+        }
+
         function toggleAdminTheme() {
             const html = document.documentElement;
             const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
@@ -1417,6 +1318,7 @@ function previewImage(input, targetId) {
             const icon = document.getElementById('admin-theme-icon');
             if (icon) icon.textContent = next === 'dark' ? 'light_mode' : 'dark_mode';
         }
+
         const savedAdminTheme = localStorage.getItem('aria_admin_theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedAdminTheme);
         window.addEventListener('DOMContentLoaded', () => {
